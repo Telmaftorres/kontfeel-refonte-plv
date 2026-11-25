@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Kontfeel | P4 — Constructeur de page</title>
+<style>
+:root{--ui:#1e1e1e;--uim:#6b6b6b;--uil:#e2e2e2;--uib:#f4f4f5;--acc:#3858e9;--accp:#eef1fd}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{font:13px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ui);background:#d9d9de}
+button,input{font:inherit;color:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.app{display:flex;height:100vh;height:100dvh}
+.panel{width:340px;flex:none;background:#fff;border-right:1px solid var(--uil);display:flex;flex-direction:column;min-height:0;z-index:30}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--uil)}
+.brand{font-weight:650;font-size:14px}.brand b{background:#d3336c;color:#fff;border-radius:5px;padding:2px 6px;margin-right:7px;font-size:11px;letter-spacing:.5px}
+.brand a{color:var(--uim);font-weight:400;font-size:12px;margin-left:6px;text-decoration:none}.brand a:hover{color:var(--ui)}
+.tabs{display:flex;border-bottom:1px solid var(--uil)}.tabs button{flex:1;border:0;background:none;padding:11px 0;font-weight:550;border-bottom:2px solid transparent;color:var(--uim)}.tabs button.on{color:var(--ui);border-bottom-color:var(--ui)}
+.pbody{flex:1;overflow:auto;padding:14px 16px 40px}
+.stage{flex:1;display:flex;flex-direction:column;min-width:0}
+.toolbar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:#fff;border-bottom:1px solid var(--uil);flex-wrap:wrap}
+.grow{flex:1}
+.tbtn{border:1px solid var(--uil);background:#fff;border-radius:6px;padding:6px 11px;white-space:nowrap}.tbtn:hover{border-color:#999}.tbtn.primary{background:var(--acc);border-color:var(--acc);color:#fff}.tbtn.on{background:var(--ui);color:#fff;border-color:var(--ui)}.tbtn:disabled{opacity:.35;cursor:default;border-color:var(--uil)}
+.seg{display:inline-flex;border:1px solid var(--uil);border-radius:6px;overflow:hidden}.seg button{border:0;background:#fff;padding:6px 11px;border-right:1px solid var(--uil)}.seg button:last-child{border-right:0}.seg button.on{background:var(--ui);color:#fff}
+.canvaswrap{flex:1;display:flex;justify-content:center;padding:14px;min-height:0;overflow:auto}
+#canvas{width:100%;height:100%;border:0;background:#fff;box-shadow:0 2px 18px #0002;border-radius:4px;transition:width .25s;flex:none}
+.only-m{display:none}
+.hint{color:var(--uim);background:var(--uib);border-radius:8px;padding:10px 12px;margin:0 0 12px}
+.blist{list-style:none;margin:0;padding:0}
+.brow{display:flex;align-items:center;gap:6px;border:1px solid var(--uil);border-radius:8px;padding:5px 5px 5px 4px;margin-bottom:5px;background:#fff;position:relative}
+.brow:hover{border-color:#bbb}.brow.sel{border-color:var(--acc);background:var(--accp)}.brow.off .bname{opacity:.45;text-decoration:line-through}
+.brow.dragging{opacity:.4}.brow.dropbefore::before,.brow.dropafter::after{content:'';position:absolute;left:0;right:0;height:3px;background:var(--acc);border-radius:2px}.brow.dropbefore::before{top:-5px}.brow.dropafter::after{bottom:-5px}
+.grip{cursor:grab;color:#aaa;display:grid;place-items:center;width:16px}
+.bico{width:26px;height:26px;border-radius:6px;background:var(--uib);display:grid;place-items:center;font-size:14px;flex:none;color:#444}.bico.lg{width:38px;height:38px;font-size:19px}
+.bname{flex:1;min-width:0;cursor:pointer;font-weight:550;line-height:1.25;padding:3px 0}.bname small{display:block;color:var(--uim);font-weight:400;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{border:0;background:none;width:28px;height:28px;border-radius:6px;display:grid;place-items:center;color:#555;padding:0;flex:none}.ib:hover{background:var(--uib);color:var(--ui)}
+.addbtn{width:100%;margin-top:8px;border:1px dashed #b5b5b5;background:#fff;border-radius:8px;padding:11px;font-weight:600}.addbtn:hover{border-color:var(--acc);color:var(--acc)}
+.back{border:0;background:none;color:var(--acc);padding:0 0 12px;font-weight:550}
+.shead{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px}.shead h3{margin:0 0 2px;font-size:15px}.shead p{margin:0;color:var(--uim)}
+.ctl{display:block;margin:0 0 16px}.cl{font-weight:650;font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;color:#444}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.tile{border:1px solid var(--uil);background:#fff;border-radius:8px;padding:6px 6px 7px;display:flex;flex-direction:column;gap:5px;align-items:stretch;text-align:center;font-size:12px}
+.tile:hover{border-color:#aaa}.tile.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc);background:var(--accp);font-weight:600}
+.tile svg{width:100%;height:auto;display:block;border-radius:4px}
+.tile svg .bg{fill:#f0f0f3}.tile svg .a{fill:#d3336c}.tile svg .d{fill:#3c3c4a}.tile svg .l{fill:#c3c3cd}.tile svg .i{fill:#c5cfee}.tile svg .w{fill:#fff}.tile svg .o{opacity:.65}.tile svg .k{fill:#19192d}.tile svg .p{fill:#fbe3ec}
+.seg2{display:flex;flex-wrap:wrap;gap:5px}.seg2 button{border:1px solid var(--uil);background:#fff;border-radius:6px;padding:6px 10px}.seg2 button.on{border-color:var(--acc);background:var(--accp);color:var(--acc);font-weight:600}
+.tog{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;font-weight:550}
+.tog input{position:absolute;opacity:0;pointer-events:none}.tog i{width:34px;height:20px;border-radius:20px;background:#c9c9cf;position:relative;flex:none;transition:background .15s}.tog i::after{content:'';position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .15s}
+.tog input:checked+i{background:var(--acc)}.tog input:checked+i::after{transform:translateX(14px)}.tog input:focus-visible+i{outline:2px solid var(--acc);outline-offset:2px}
+.help{color:var(--uim);font-size:12px;margin:6px 0 0}
+.imgs{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.imgpick{border:1px solid var(--uil);border-radius:6px;padding:2px;background:#fff;aspect-ratio:1}.imgpick img{width:100%;height:100%;object-fit:contain;display:block}.imgpick.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.sactions{display:grid;grid-template-columns:1fr 1fr;gap:6px;border-top:1px solid var(--uil);padding-top:14px;margin-top:6px}.sactions button{border:1px solid var(--uil);background:#fff;border-radius:6px;padding:7px}.sactions button:hover{border-color:#999}.sactions .danger{color:#c62828;grid-column:1/-1}.sactions .danger:hover{border-color:#c62828;background:#fdecec}
+.linkbtn{border:0;background:none;color:var(--acc);padding:0;margin:0 0 14px;text-decoration:underline}
+.grp{font-weight:650;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#444;margin:16px 0 7px}.grp:first-child{margin-top:0}
+.addgrid{display:grid;grid-template-columns:1fr;gap:6px}
+.additem{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid var(--uil);background:#fff;border-radius:8px;padding:8px}.additem:hover{border-color:var(--acc);background:var(--accp)}.additem b{display:block;font-weight:600}.additem small{color:var(--uim)}
+.insnote{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--accp);color:var(--acc);border-radius:8px;padding:8px 10px;margin-bottom:12px;font-weight:550}.insnote button{border:0;background:none;color:var(--acc);text-decoration:underline;padding:0}
+.presets{display:grid;gap:6px}.preset{text-align:left;border:1px solid var(--uil);background:#fff;border-radius:8px;padding:9px 11px}.preset:hover{border-color:var(--acc);background:var(--accp)}.preset b{display:block}.preset small{color:var(--uim)}
+.swatches{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.sw{width:30px;height:30px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--uil);padding:0}.sw.on{box-shadow:0 0 0 2px var(--ui)}
+.swatches input[type=color]{width:34px;height:34px;border:1px solid var(--uil);border-radius:8px;padding:2px;background:#fff;cursor:pointer}
+.danger-link{border:1px solid var(--uil);background:#fff;border-radius:6px;padding:8px;width:100%;color:#c62828;margin-top:8px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);opacity:0;pointer-events:none;background:#1e1e1e;color:#fff;border-radius:8px;padding:10px 14px;display:flex;gap:14px;align-items:center;transition:.2s;z-index:100;box-shadow:0 6px 24px #0004;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}.toast button{border:0;background:none;color:#9fb4ff;font-weight:650;padding:0}
+.app.previewing .panel{display:none}
+@media(max-width:900px){
+ .only-m{display:inline-flex}
+ .panel{position:fixed;top:0;bottom:0;left:0;width:min(360px,92vw);transform:translateX(-102%);transition:transform .2s;box-shadow:0 0 40px #0003}
+ .app.panel-open .panel{transform:none}
+ .canvaswrap{padding:0}#canvas{border-radius:0;box-shadow:none}
+ .hide-m{display:none}
+}
+@media(max-width:560px){.tbtn .lbl{display:none}.toolbar{gap:4px;padding:6px 8px}.seg button{padding:6px 8px}}
+</style></head>
+<body>
+<div class="app" id="app">
+ <aside class="panel" id="panel" aria-label="Constructeur de page">
+  <div class="ph"><div class="brand"><b>P4</b>Constructeur de page<a href="index.html">← Prototypes</a></div><button class="ib only-m" id="closePanel" aria-label="Fermer le panneau">✕</button></div>
+  <nav class="tabs"><button data-tab="blocks" class="on">Blocs</button><button data-tab="add">Ajouter</button><button data-tab="style">Style</button></nav>
+  <div class="pbody" id="pbody"></div>
+ </aside>
+ <div class="stage">
+  <div class="toolbar">
+   <button class="tbtn only-m" id="openPanel">☰ <span class="lbl">Blocs</span></button>
+   <div class="seg" id="devices" role="group" aria-label="Taille d’écran"><button data-w="100%" class="on">Ordinateur</button><button data-w="820px">Tablette</button><button data-w="390px">Mobile</button></div>
+   <div class="grow"></div>
+   <button class="tbtn" id="undo" title="Annuler (Ctrl+Z)" aria-label="Annuler">↶</button><button class="tbtn" id="redo" title="Rétablir (Ctrl+Maj+Z)" aria-label="Rétablir">↷</button>
+   <button class="tbtn" id="previewBtn">◉ <span class="lbl">Aperçu</span></button>
+   <button class="tbtn" id="shareBtn" title="Copier un lien qui ouvre cette mise en page">🔗 <span class="lbl">Copier le lien</span></button>
+   <button class="tbtn primary" id="exportBtn" title="Télécharger la page en HTML autonome">⬇ <span class="lbl">Télécharger</span></button>
+  </div>
+  <div class="canvaswrap"><iframe id="canvas" title="Aperçu de la page"></iframe></div>
+ </div>
+</div>
+<div class="toast" id="toast" role="status"><span id="toastMsg"></span><button id="toastUndo" hidden>Annuler</button></div>
+<script>
+const ASSETS=/*__ASSETS__*/{};
+const PRODUCTS=/*__PRODUCTS__*/[];
+const HERO=/*__HERO__*/[];
+const BASE_CSS=/*__BASECSS__*/'';
+
+/* ---------- Données de la page ---------- */
+const CATS=[["Totems de comptoir","Communiquez sur un espace réduit.","https://www.kontfeel.fr/presentoir-comptoir/totem-de-comptoir"],["Porte-documents","Présentez brochures, flyers et catalogues.","https://www.kontfeel.fr/plv/porte-document-en-carton"],["Chevalets et cavaliers","Communiquez sur les tables et comptoirs.","https://www.kontfeel.fr/plv/panneau-chevalet"],["Distributeurs et vrac","Distribuez produits et échantillons en libre-service.","https://www.kontfeel.fr/plv/distributeur-carton"],["Sabots et stop-piles","Présentez vos produits dans un support compact.","https://www.kontfeel.fr/plv/stop-pile"],["Prêts à vendre","Facilitez la mise en rayon et l’installation.","https://www.kontfeel.fr/display-plv/pret-a-vendre"],["Présentoirs escaliers","Valorisez plusieurs références sur différents niveaux.","https://www.kontfeel.fr/display-plv/presentoir-escalier"],["Présentoirs à empreintes","Maintenez les produits dans des découpes adaptées.","https://www.kontfeel.fr/display-plv/presentoir-de-comptoir-avec-empreintes"],["Rappels de marque","Renforcez la présence visuelle de votre marque.","https://www.kontfeel.fr/plv/rappel-de-marque"],["Glorifiers","Mettez en valeur un produit phare.","https://www.kontfeel.fr/signaletique-et-lineaire/glorifier"]];
+const SECTORS=[["Cosmétique & beauté","Testeurs, soins, maquillage et parfumerie.","https://www.kontfeel.fr/solutions-metiers/beaute-cosmetique-luxe","c9","Présentoir noir en métal pour produits de maquillage"],["Pharmacie & santé","Compléments alimentaires et produits de soin.","https://www.kontfeel.fr/plv-pharmacie","c3","Distributeur vertical orange et bleu Suvéal Duo"],["Édition & librairie","Livres, coffrets et nouveautés éditoriales.","https://www.kontfeel.fr/solutions-metiers/edition-culture-loisirs","p9","Deux présentoirs escaliers bleus pour les livres Psycho-Pop"],["Alimentaire","Confiseries, snacks et produits d’épicerie.","https://www.kontfeel.fr/plv-magasin",null,""],["Retail & distribution","Accessoires et produits du quotidien.","https://www.kontfeel.fr/solutions-metiers",null,""],["Restauration","Chevalets, promotions et communication sur table.","https://www.kontfeel.fr/solutions-metiers/services-chr-institutionnel","c2","Chevalet de table rouge et blanc aux couleurs de KFC"]];
+const MATS=[["cardboard","Carton","Léger et personnalisable, adapté aux opérations promotionnelles et aux déploiements en réseau.","https://www.kontfeel.fr/display-plv/presentoir-de-comptoir-carton"],["wood","Bois","Un rendu chaleureux pour des supports conçus selon la durée d’utilisation recherchée."],["metal","Métal","Une structure robuste pour des usages répétés et des produits nécessitant une bonne tenue."],["plastic","Plastique","PVC, plexiglas et autres plastiques selon les formes, la transparence et la finition recherchées."]];
+const STEPS=[["Brief","Produit, quantités, points de vente, contraintes et charte graphique."],["Proposition 3D","Modélisation selon la complexité du support."],["Chiffrage","Devis adapté au format, aux finitions et aux quantités."],["Prototype éventuel","Réalisation et test si le projet le nécessite."],["BAT et production","Validation, fabrication, conditionnement et livraison."]];
+const FAQ=[["Qu’est-ce qu’un présentoir de comptoir ?","Un support installé sur une caisse, un comptoir ou une table pour valoriser des produits ou communiquer auprès des clients."],["Combien coûte un présentoir de comptoir sur mesure ?","Le prix dépend des dimensions, des matériaux, des finitions et des quantités commandées."],["Quelle matière choisir pour une PLV de comptoir ?","Le choix dépend du poids des produits, de la durée d’utilisation et du rendu souhaité. Le bureau d’études vous accompagne."],["Peut-on personnaliser entièrement un présentoir ?","Dimensions, structure, visuels et finitions peuvent être adaptés au projet."],["Quel présentoir choisir pour une pharmacie ?","Les présentoirs escaliers, à empreintes et les distributeurs répondent à différents besoins en officine."],["Existe-t-il une quantité minimale de commande ?","Les conditions de fabrication sont étudiées en fonction du projet et des volumes souhaités. Contactez-nous pour vérifier la faisabilité."],["Quels sont les délais de fabrication ?","Les délais dépendent de la complexité du support, des quantités et des étapes de validation. Ils sont précisés lors de l’étude."],["Les présentoirs sont-ils livrés montés ou à plat ?","Le conditionnement et la livraison sont définis selon la conception du présentoir et les contraintes logistiques."]];
+const CASES=[[2,"c2","Chevalet personnalisé pour faciliter le service à table en restauration rapide."],[8,"c9","Support de comptoir en métal conçu pour présenter une gamme de maquillage."],[9,"p9","Présentoir à niveaux pour mettre en avant des ouvrages en librairie."]];
+const IMGCHOICES=['h0','h1','h2','h3','h4','h5','h6','h7','h8','c0','c1','c2','c3','c4','c5','c6','c7','c8','c9','p9'];
+const NAV='<a href="https://www.kontfeel.fr/" target="_blank" rel="noopener">PLV carton</a><a class="active" href="#gammes">Présentoir comptoir ⌄</a><a href="https://www.kontfeel.fr/presentoir-sol/mobilier-permanent" target="_blank" rel="noopener">Présentoir sol</a><a href="https://www.kontfeel.fr/" target="_blank" rel="noopener">Signalétique et linéaire</a><a href="https://www.kontfeel.fr/" target="_blank" rel="noopener">Stand événementiel</a><a href="https://www.kontfeel.fr/plv-packaging" target="_blank" rel="noopener">Packaging et coffrets</a><a href="https://www.kontfeel.fr/solutions-metiers" target="_blank" rel="noopener">Solutions métiers</a>';
+const DIALOGS='<dialog id="productDialog"><button aria-label="Fermer" class="close">×</button><img alt="" class="modal-img" id="modalImg"><span class="tag" id="modalType"></span><h2 id="modalName"></h2><p id="modalMeta"></p><a class="familylink" hidden href="#" id="modalSource" rel="noopener" target="_blank">Voir la source sur Kontfeel ↗</a><p style="margin-top:14px"><button class="btn" id="modalQuote">Étudier un projet similaire →</button></p></dialog><dialog id="quoteDialog"><button aria-label="Fermer" class="close">×</button><h2>Parlons de votre projet</h2><p class="notice">Formulaire de démonstration uniquement. Aucune donnée ne sera envoyée ni enregistrée.</p><form class="formgrid" id="quoteForm"><label>Nom<input autocomplete="off" required></label><label>Entreprise<input autocomplete="off" required></label><label>Email professionnel<input autocomplete="off" required type="email"></label><label>Quantité envisagée<input min="1" type="number"></label><label class="full">Type de présentoir<select id="quoteType"></select></label><label class="full">Votre projet<textarea id="project" rows="4"></textarea></label><button class="btn full" type="submit">Simuler la demande →</button><p class="full notice hide" id="confirmation" role="status">Simulation réussie. Aucune demande n’a été envoyée.</p></form></dialog>';
+
+/* ---------- CSS ajouté à la page (variantes des blocs) ---------- */
+const EXTRA_CSS=`
+.kb.sticky{position:sticky;top:0;z-index:50}
+.an-rose{background:var(--pink);color:#fff}.an-sombre{background:var(--ink);color:#fff}
+.h-center .top{display:grid;grid-template-columns:1fr auto 1fr;gap:20px}.h-center .search{justify-self:start;width:100%;max-width:320px}.h-center .phone{justify-self:end;text-align:right}.h-center .nav{justify-content:center;gap:4px 14px}
+.h-compact .top{padding:10px 0}.h-compact .logo{width:170px}.h-compact .nav{padding:0;flex:1;justify-content:center;flex-wrap:nowrap;overflow:auto;gap:0;font-size:13px}.h-compact .nav a{white-space:nowrap;padding:6px 8px}
+@media(max-width:1000px){.h-compact .top{flex-wrap:wrap}.h-compact .nav{order:3;flex:1 1 100%;justify-content:flex-start}}
+@media(max-width:650px){.h-center .top{grid-template-columns:1fr;justify-items:center}.h-center .search{max-width:none;order:3}.h-center .phone{justify-self:center;text-align:center}}
+.hero.t-rose{background:linear-gradient(105deg,var(--pale),#fff)}.hero.t-blanc{background:#fff;border:1px solid var(--line)}
+@media(min-width:651px){.hero.v-split-left .hero-txt{order:2}}
+.hero-full{background:linear-gradient(115deg,var(--pink),var(--pinkd));margin-bottom:18px}
+.hero.v-immersive{background:none;border-radius:0;padding:44px 0;margin:0 auto;color:#fff}.v-immersive p{color:#fffffff0}.v-immersive .eyebrow{color:#fff;opacity:.85}
+.v-immersive .btn{background:#fff;color:var(--pink);border-color:#fff}.v-immersive .btn.secondary{background:transparent;color:#fff;border-color:#ffffffa0}
+.v-immersive .slider{background:#fff;border-radius:14px;box-shadow:0 18px 50px #0003}.v-immersive .thumbs button{border-color:#ffffff70}.v-immersive .thumbs button.selected{border-color:#fff}
+.hero.v-center{display:block;text-align:center;padding:52px 28px}.v-center p{max-width:740px;margin:0 auto 15px}.v-center .actions{justify-content:center}
+.hero-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:30px}.hero-strip img{width:100%;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:10px;border:1px solid var(--line);display:block}
+@media(max-width:650px){.hero-strip{grid-template-columns:repeat(3,minmax(0,1fr))}.hero-strip img:nth-child(n+4){display:none}}
+.hero.v-minimal{display:block;background:none;padding:34px 0 18px;border-radius:0}.v-minimal h1{font-size:clamp(32px,5vw,58px);max-width:900px}.v-minimal p{max-width:760px}
+.slider{position:relative;border-radius:13px}
+.hero-photo.fade{animation:kfFade .45s ease}@keyframes kfFade{from{opacity:.2}to{opacity:1}}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:0;background:#ffffffeb;box-shadow:0 2px 12px #19192d2e;font-size:26px;line-height:1;color:var(--ink);display:grid;place-items:center;padding:0 0 3px;z-index:2}
+.arrow.prev{left:10px}.arrow.next{right:10px}.arrow:hover{background:#fff;color:var(--pink)}
+.dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:2}.dots button{width:8px;height:8px;border-radius:5px;border:0;padding:0;background:#19192d38;transition:width .2s}.dots button.selected{background:var(--pink);width:22px}
+.benefits.v-cartes{border:0;padding:18px 0;gap:14px}.benefits.v-cartes>div{background:var(--bg);border-radius:12px;padding:18px 12px}
+.benefits-band{background:var(--pink);color:#fff;margin-top:-18px}.benefits-band .benefits{border:0;padding:16px 0}.benefits-band .benefits span{color:#fff}
+.cats[data-cols="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}.cats[data-cols="3"]{grid-template-columns:repeat(3,minmax(0,1fr))}.cats[data-cols="4"]{grid-template-columns:repeat(4,minmax(0,1fr))}.cats[data-cols="5"]{grid-template-columns:repeat(5,minmax(0,1fr))}
+.cat.tile{flex-direction:column;align-items:stretch;text-align:center;padding:10px;min-height:0;gap:8px;background:#fff}.cat.tile img{width:100%;height:auto;aspect-ratio:1}.cat.tile small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.catpills{display:flex;flex-wrap:wrap;gap:8px}.cat.pill{min-height:0;padding:5px 15px 5px 5px;border-radius:40px;gap:9px;font-size:13px}.cat.pill img{width:38px;height:38px;border-radius:50%;background:#fff;mix-blend-mode:normal}.cat.pill span{flex:none}
+@media(max-width:1000px){.cats[data-cols]{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){.cats[data-cols]{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kf-gal .gallery{gap:14px}
+.kf-gal[data-cols="3"] .gallery{grid-template-columns:repeat(3,minmax(0,1fr))}.kf-gal[data-cols="4"] .gallery{grid-template-columns:repeat(4,minmax(0,1fr))}.kf-gal[data-cols="5"] .gallery{grid-template-columns:repeat(5,minmax(0,1fr))}.kf-gal[data-cols="6"] .gallery{grid-template-columns:repeat(6,minmax(0,1fr))}
+.kf-gal .product .info{padding:12px}.kf-gal .product strong{font-size:14px}
+.kf-gal.stick.f-top .filters{position:sticky;top:0;z-index:20;box-shadow:0 4px 12px #19192d12;margin-bottom:4px}
+.kf-gal.f-top .filters.one{grid-template-columns:minmax(0,420px) auto;justify-content:start}
+.gallery-layout{display:grid;grid-template-columns:245px minmax(0,1fr);gap:24px;align-items:start}
+.f-right .gallery-layout{grid-template-columns:minmax(0,1fr) 245px}.f-right .gallery-sidebar{order:2}
+.gallery-results{min-width:0}
+.gallery-sidebar{position:sticky;top:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;max-height:calc(100vh - 24px);overflow:auto}
+.gallery-sidebar h3{font-size:16px;margin-bottom:12px}
+.gallery-sidebar .filters{display:grid;grid-template-columns:minmax(0,1fr);padding:0;border:0;background:#fff;gap:16px}
+.type-field{border:0;padding:0;margin:0;min-width:0}.type-field legend{font-size:14px;font-weight:700;margin-bottom:8px;padding:0}
+.gallery-sidebar .type-options{display:grid;gap:6px}.gallery-sidebar .sector-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 6px}.gallery-sidebar .sector-options .type-option{font-size:11.5px;gap:5px}
+.filters .type-option{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:500;line-height:1.35}
+.filters .type-option input{width:15px;height:15px;flex:0 0 15px;margin:0;accent-color:var(--pink);display:inline-block;padding:0}
+.type-option:has(input:checked){color:var(--pink);font-weight:650}
+.gallery-sidebar .btn{width:100%;padding:10px 12px}
+.kf-gal .filters.pills{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;padding:9px 12px;margin:0 0 8px;border-radius:10px}
+.pill-title{font-size:13px;white-space:nowrap;min-width:92px}
+.pills .pill-options{display:flex;flex:1 1 550px;flex-wrap:wrap;gap:5px;align-items:center}
+.f-pill{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:20px;padding:4px 10px;font-size:12px;line-height:1.4;min-height:27px}
+.f-pill[aria-pressed=true]{border-color:var(--pink);background:var(--pale);color:var(--pink);font-weight:650}
+.pills .reset{padding:5px 12px;font-size:12px;white-space:nowrap;border:1px solid var(--pink);border-radius:7px}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden;clip-path:inset(50%);white-space:nowrap;margin:0!important;padding:0!important;min-height:0!important}
+.c-epure .product{border-color:transparent;background:transparent}.c-epure .product img{border-radius:12px}.c-epure .product:hover{border-color:transparent}.c-epure .product .info{padding:10px 2px}
+.c-ombre .product{border-color:transparent;box-shadow:0 4px 18px #19192d14}.c-ombre .product:hover{box-shadow:0 10px 26px #19192d24;border-color:transparent}
+.kf-gal.f-left[data-cols="6"] .gallery,.kf-gal.f-right[data-cols="6"] .gallery{grid-template-columns:repeat(5,minmax(0,1fr))}@media(max-width:1300px){.kf-gal.f-left[data-cols="5"] .gallery,.kf-gal.f-left[data-cols="6"] .gallery,.kf-gal.f-right[data-cols="5"] .gallery,.kf-gal.f-right[data-cols="6"] .gallery{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1050px){.kf-gal[data-cols="5"] .gallery,.kf-gal[data-cols="6"] .gallery{grid-template-columns:repeat(4,minmax(0,1fr))}.kf-gal.f-left .gallery,.kf-gal.f-right .gallery{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:700px){.gallery-layout,.f-right .gallery-layout{display:block}.gallery-sidebar{position:static;max-height:none;margin-bottom:14px;padding:12px}.gallery-sidebar h3{display:none}.gallery-sidebar .type-options{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.kf-gal .gallery{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}.kf-gal .filters.pills{padding:8px;gap:5px}.f-pill{font-size:11px;padding:4px 7px}.pill-options{flex-basis:100%!important}}
+.single{max-width:860px}.mat-only .materials{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:800px){.mat-only .materials{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.sectorgrid[data-cols="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}.sectorgrid.simple .sectorcard{padding:16px 18px;display:block}.sectorgrid.simple .sectorcard>div:last-child{padding:0}
+@media(max-width:550px){.sectorgrid[data-cols]{grid-template-columns:1fr}}
+.steps.vertical{grid-template-columns:1fr;max-width:760px;gap:0}.steps.vertical .step{display:grid;grid-template-columns:64px 1fr;column-gap:10px;background:none;border-radius:0;border-left:2px solid var(--line);padding:14px 0 14px 22px}.steps.vertical .step b{grid-row:span 2;font-size:30px;line-height:1}
+.cases.rows{grid-template-columns:1fr}.cases.rows .case{display:grid;grid-template-columns:320px 1fr;align-items:center}.cases.rows .case img{height:220px}@media(min-width:651px){.cases.rows .case:nth-child(even) img{order:2}}@media(max-width:650px){.cases.rows .case{display:block}}
+.faq-grid.one{grid-template-columns:1fr;max-width:860px}
+.rating.r-rose{background:var(--pale);border-color:transparent}
+.cta{background:linear-gradient(110deg,var(--pink),var(--pinkd))}.cta.cta-sombre{background:var(--ink)}.cta.cta-sombre .btn{color:var(--ink)}
+.cta.cta-clair{background:var(--pale);color:var(--ink)}.cta.cta-clair .btn{background:var(--pink);color:#fff}
+footer.f-light{background:var(--bg);color:var(--ink);border-top:1px solid var(--line)}footer.f-light p{color:var(--muted)}
+.kf-text{max-width:860px}.kf-text.al-center{margin:auto;text-align:center}
+.kf-media{align-items:center}.media-img{width:100%;aspect-ratio:4/3;object-fit:contain;background:#fff;border-radius:14px;border:1px solid var(--line);display:block}@media(min-width:651px){.kf-media.img-right .media-img{order:2}}
+.kf-space.sz-s{height:16px}.kf-space.sz-m{height:40px}.kf-space.sz-l{height:80px}.kf-space{display:flex;align-items:center}.kf-space .wrap{border-top:1px solid var(--line)}
+`;
+
+/* ---------- CSS du mode édition (dans l'aperçu uniquement) ---------- */
+const KB_CSS=`
+.kb{position:relative}
+.kb-edit .kb[data-id]:hover{outline:1px dashed #3858e9aa;outline-offset:-1px}
+.kb-edit .kb.sel{outline:2px solid #3858e9!important;outline-offset:-2px}
+.kb-bar{display:none;position:absolute;top:6px;right:6px;z-index:70;background:#1e1e1e;color:#fff;border-radius:7px;padding:3px;gap:1px;align-items:center;font:12px/1 -apple-system,"Segoe UI",Arial,sans-serif;box-shadow:0 4px 14px #0004}
+.kb-edit .kb:hover>.kb-bar,.kb-edit .kb.sel>.kb-bar{display:flex}
+.kb-bar span{padding:0 9px 0 7px;font-weight:600;white-space:nowrap}
+.kb-bar button{border:0;background:none;color:#fff;width:28px;height:26px;border-radius:5px;display:grid;place-items:center;font-size:14px;padding:0;cursor:pointer}
+.kb-bar button:hover{background:#ffffff2b}
+.kb-ins{position:relative;height:0;z-index:65}
+.kb-ins::before{content:'';position:absolute;left:0;right:0;top:-9px;height:18px}
+.kb-ins button{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);opacity:0;border:0;background:#3858e9;color:#fff;border-radius:20px;padding:5px 13px;font:600 12px/1.3 -apple-system,"Segoe UI",Arial,sans-serif;box-shadow:0 2px 10px #0003;transition:opacity .15s;cursor:pointer;white-space:nowrap}
+.kb-edit .kb-ins:hover button,.kb-ins button:focus-visible{opacity:1}
+.kb-ins.first{height:0}.kb-ins.last{height:60px}.kb-edit .kb-ins.last button{opacity:.9;top:30px}
+.kb-hidden{padding:12px;text-align:center;background:repeating-linear-gradient(45deg,#f4f4f6 0 10px,#fff 10px 20px);color:#6b6b6b;font:12px -apple-system,"Segoe UI",Arial,sans-serif;border:1px dashed #c8c8c8}
+.kb-edit [data-edit]{cursor:text;border-radius:3px}
+.kb-edit [data-edit]:hover{box-shadow:0 0 0 1px #3858e977}
+.kb-edit [data-edit]:focus{outline:2px solid #3858e9;outline-offset:2px;box-shadow:none}
+.kb-edit [data-edit]:empty::before{content:'Texte…';opacity:.45}
+.kb-edit .kb.flash{animation:kbFlash 1s ease}@keyframes kbFlash{0%{box-shadow:inset 0 0 0 9999px #3858e922}100%{box-shadow:inset 0 0 0 9999px #3858e900}}
+`;
+
+/* ---------- Script embarqué dans la page (filtres, bannière, fenêtres) ---------- */
+function KFRuntime(){
+  const D=window.KF_DATA,P=D.products,CATS=D.categories,doc=document;
+  const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const missing='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 240"><rect width="300" height="240" fill="#f6f6f9"/><text x="150" y="125" fill="#77798b" font-family="Arial" font-size="13" text-anchor="middle">Photo indisponible</text></svg>');
+  window.kfSafe=img=>{img.onerror=null;img.src=missing};
+  const sectors=[...new Set(P.map(p=>p.sect))].sort((a,b)=>a.localeCompare(b,'fr'));
+  const KF=window.KF={timers:[]};
+  const byId=id=>doc.getElementById(id);
+  let selected=null;
+  const card=(p,i)=>`<button class="product" data-product="${i}"><img src="${p.img}" alt="${esc(p.alt)}" loading="lazy" width="300" height="300" onerror="kfSafe(this)"><div class="info"><span class="tag">${esc(p.typ)}</span><strong>${esc(p.name)}</strong><small>${esc(p.mat)} · ${esc(p.sect)}${p.kind?'<br>'+esc(p.kind):''}</small></div></button>`;
+  function openProduct(i){const p=P[i];if(!p)return;selected=p;const im=byId('modalImg');im.onerror=()=>kfSafe(im);im.src=p.img;im.alt=p.alt;byId('modalType').textContent=p.typ;byId('modalName').textContent=p.name;byId('modalMeta').textContent='Matière : '+p.mat+' · Secteur : '+p.sect;const s=byId('modalSource');s.hidden=!p.source;s.href=p.source||'#';byId('productDialog').showModal()}
+  function openQuote(p){const pd=byId('productDialog');if(pd.open)pd.close();byId('quoteForm').reset();byId('confirmation').classList.add('hide');if(p){byId('quoteType').value=p.typ;byId('project').value='Projet similaire à : '+p.name}byId('quoteDialog').showModal()}
+  function initHero(el){
+    const imgs=D.hero,ph=el.querySelector('.hero-photo');if(!ph||!imgs.length)return;
+    const th=el.querySelector('.thumbs'),dots=el.querySelector('.dots');let i=0,timer=null,paused=false;
+    if(th)th.innerHTML=imgs.map(x=>`<button type="button" aria-label="${esc(x.alt)}"><img src="${x.src}" alt=""></button>`).join('');
+    if(dots)dots.innerHTML=imgs.map((x,j)=>`<button type="button" aria-label="Image ${j+1}"></button>`).join('');
+    const groups=[th,dots].filter(Boolean);
+    function go(n,user,anim){i=(n+imgs.length)%imgs.length;ph.src=imgs[i].src;ph.alt=imgs[i].alt;if(anim!==false){ph.classList.remove('fade');void ph.offsetWidth;ph.classList.add('fade')}groups.forEach(g=>[...g.children].forEach((b,j)=>{b.classList.toggle('selected',j===i);b.setAttribute('aria-pressed',String(j===i))}));if(user)restart()}
+    groups.forEach(g=>[...g.children].forEach((b,j)=>b.onclick=()=>go(j,true)));
+    const pv=el.querySelector('.arrow.prev'),nx=el.querySelector('.arrow.next');if(pv)pv.onclick=()=>go(i-1,true);if(nx)nx.onclick=()=>go(i+1,true);
+    const auto=el.dataset.auto==='1'&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+    function restart(){clearInterval(timer);if(auto&&!paused){timer=setInterval(()=>go(i+1),4500);KF.timers.push(timer)}}
+    el.onmouseenter=()=>{paused=true;clearInterval(timer)};el.onmouseleave=()=>{paused=false;restart()};
+    el.addEventListener('focusin',()=>{paused=true;clearInterval(timer)});el.addEventListener('focusout',()=>{paused=false;restart()});
+    let x0=null;el.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});el.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40)go(i+(dx<0?1:-1),true);x0=null});
+    go(0,false,false);restart();
+  }
+  function initGallery(sec){
+    const mode=sec.dataset.filter,withSect=sec.dataset.sectors==='1',per=+sec.dataset.per||12;
+    const st={types:new Set(),sects:new Set(),q:'',limit:per};
+    const F=sec.querySelector('.kf-filters'),G=sec.querySelector('.gallery'),S=sec.querySelector('.status'),M=sec.querySelector('.kf-more');
+    const opt=v=>`<option value="${esc(v)}">${esc(v)}</option>`;
+    const box=(g,v)=>`<label class="type-option"><input type="checkbox" data-g="${g}" value="${esc(v)}"><span>${esc(v)}</span></label>`;
+    const pill=(g,v)=>`<button type="button" class="f-pill" data-g="${g}" data-v="${esc(v)}" aria-pressed="false">${esc(v)}</button>`;
+    let h='';
+    if(mode==='top')h=`<div class="filters${withSect?'':' one'}"><label>Typologie<select data-g="types"><option value="">Tous</option>${CATS.map(opt).join('')}</select></label>${withSect?`<label>Secteur<select data-g="sects"><option value="">Tous</option>${sectors.map(opt).join('')}</select></label>`:''}<button type="button" class="reset" data-reset>Réinitialiser</button></div>`;
+    else if(mode==='left'||mode==='right')h=`<h3>Filtres</h3><div class="filters"><fieldset class="type-field"><legend>Type de PLV</legend><div class="type-options">${CATS.map(v=>box('types',v)).join('')}</div></fieldset>${withSect?`<fieldset class="type-field"><legend>Secteur d’activité</legend><div class="type-options sector-options">${sectors.map(v=>box('sects',v)).join('')}</div></fieldset>`:''}<button type="button" class="btn" data-reset>Tout voir</button></div>`;
+    else if(mode==='pills')h=`<div class="filters pills" role="group" aria-label="Filtrer par type de PLV"><strong class="pill-title">Type de PLV</strong><div class="pill-options">${CATS.map(v=>pill('types',v)).join('')}</div><button type="button" class="reset" data-reset>Tout voir</button></div>${withSect?`<div class="filters pills" role="group" aria-label="Filtrer par secteur"><strong class="pill-title">Secteur</strong><div class="pill-options">${sectors.map(v=>pill('sects',v)).join('')}</div></div>`:''}`;
+    if(F)F.innerHTML=h;
+    const root=F||sec;
+    root.querySelectorAll('select[data-g]').forEach(s=>s.onchange=()=>{st[s.dataset.g]=new Set(s.value?[s.value]:[]);st.limit=per;render()});
+    root.querySelectorAll('input[data-g]').forEach(c=>c.onchange=()=>{const set=st[c.dataset.g];c.checked?set.add(c.value):set.delete(c.value);st.limit=per;render()});
+    root.querySelectorAll('.f-pill').forEach(b=>b.onclick=()=>{const set=st[b.dataset.g],v=b.dataset.v;set.has(v)?set.delete(v):set.add(v);st.limit=per;render()});
+    root.querySelectorAll('[data-reset]').forEach(b=>b.onclick=()=>{st.types.clear();st.sects.clear();st.q='';st.limit=per;render()});
+    if(M)M.onclick=()=>{st.limit+=per;render()};
+    function render(){
+      const q=norm(st.q.trim());
+      const res=P.map((p,i)=>[p,i]).filter(([p])=>(!q||norm([p.name,p.typ,p.mat,p.sect].join(' ')).includes(q))&&(!st.types.size||st.types.has(p.typ))&&(!st.sects.size||st.sects.has(p.sect)));
+      root.querySelectorAll('select[data-g]').forEach(s=>{const set=st[s.dataset.g];s.value=set.size?[...set][0]:''});
+      root.querySelectorAll('input[data-g]').forEach(c=>c.checked=st[c.dataset.g].has(c.value));
+      root.querySelectorAll('.f-pill').forEach(b=>b.setAttribute('aria-pressed',String(st[b.dataset.g].has(b.dataset.v))));
+      if(S){const chips=[...(st.q?[['q',st.q]]:[]),...[...st.types].map(v=>['types',v]),...[...st.sects].map(v=>['sects',v])];
+        S.innerHTML=`<strong>${res.length} réalisation${res.length>1?'s':''}</strong>`+chips.map(([k,v])=>`<button type="button" class="chip" data-k="${k}" data-v="${esc(v)}">${k==='q'?'Recherche : ':''}${esc(v)} ×</button>`).join('');
+        S.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{if(c.dataset.k==='q')st.q='';else st[c.dataset.k].delete(c.dataset.v);st.limit=per;render()})}
+      G.innerHTML=res.length?res.slice(0,st.limit).map(([p,i])=>card(p,i)).join(''):'<div class="empty">Aucune réalisation ne correspond à ces critères. Modifiez vos filtres.</div>';
+      if(M)M.closest('.center').classList.toggle('hide',res.length<=st.limit);
+      G.querySelectorAll('[data-product]').forEach(b=>b.onclick=()=>openProduct(+b.dataset.product));
+      doc.querySelectorAll('.cat[data-cat]').forEach(b=>b.classList.toggle('on',st.types.has(b.dataset.cat)));
+    }
+    render();
+    return{choose(c){st.types=new Set([c]);st.sects.clear();st.q='';st.limit=per;render();sec.scrollIntoView({behavior:'smooth'})},search(q){st.types.clear();st.sects.clear();st.q=q;st.limit=per;render();sec.scrollIntoView({behavior:'smooth'})}};
+  }
+  KF.init=function(){
+    KF.timers.forEach(clearInterval);KF.timers=[];
+    const qt=byId('quoteType');if(qt)qt.innerHTML='<option value="">À définir</option>'+CATS.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+    const gals=[...doc.querySelectorAll('[data-kf=gallery]')].map(initGallery);
+    doc.querySelectorAll('.cat[data-cat]').forEach(b=>b.onclick=()=>{if(gals[0])gals[0].choose(b.dataset.cat)});
+    doc.querySelectorAll('.kf-search').forEach(f=>f.onsubmit=e=>{e.preventDefault();if(gals[0])gals[0].search(f.querySelector('input').value.trim())});
+    doc.querySelectorAll('[data-kf=hero]').forEach(initHero);
+    doc.querySelectorAll('.quote').forEach(b=>b.onclick=()=>openQuote());
+    doc.querySelectorAll('[data-case]').forEach(b=>b.onclick=()=>openProduct(+b.dataset.case));
+    const mq=byId('modalQuote');if(mq)mq.onclick=()=>openQuote(selected);
+    doc.querySelectorAll('dialog').forEach(d=>{d.querySelector('.close').onclick=()=>d.close();d.onclick=e=>{if(e.target===d)d.close()}});
+    const qf=byId('quoteForm');if(qf)qf.onsubmit=e=>{e.preventDefault();byId('confirmation').classList.remove('hide')};
+  };
+}
+
+/* ---------- Utilitaires ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>'b'+Math.random().toString(36).slice(2,9);
+const safeJSON=o=>JSON.stringify(o).replace(/</g,'\\u003c');
+function hexRgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');const n=parseInt(h,16);return[(n>>16)&255,(n>>8)&255,n&255]}
+const toHex=a=>'#'+a.map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');
+const tint=(h,t)=>toHex(hexRgb(h).map(v=>v+(255-v)*t));
+const shade=(h,t)=>toHex(hexRgb(h).map(v=>v*(1-t)));
+
+/* ---------- Mini-schémas des variantes ---------- */
+const R=(x,y,w,h,c,rx=1)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" class="${c}"/>`;
+const SV=i=>`<svg viewBox="0 0 60 38" aria-hidden="true">${R(0,0,60,38,'bg',3)}${i}</svg>`;
+const TX=(x,y,w=21,c='')=>R(x,y,w*.45,2,'a'+c)+R(x,y+4,w,3.5,'d'+c)+R(x,y+10,w*.9,2,'l'+c)+R(x,y+14,w*.75,2,'l'+c)+R(x,y+20,w*.45,4,'a'+c,1.5);
+const GRID=(x,y,w,h,cols,rows,c='i')=>{let o='';const g=2,cw=(w-g*(cols-1))/cols,ch=(h-g*(rows-1))/rows;for(let r=0;r<rows;r++)for(let k=0;k<cols;k++)o+=R(x+k*(cw+g),y+r*(ch+g),cw,ch,c,1);return o};
+const SK={
+ split:SV(TX(5,7)+R(32,5,23,21,'i',2)+[0,1,2,3,4].map(j=>R(32+j*4.8,28,4,4,'l',.8)).join('')),
+ splitleft:SV(R(5,5,23,21,'i',2)+[0,1,2,3,4].map(j=>R(5+j*4.8,28,4,4,'l',.8)).join('')+TX(34,7)),
+ immersive:`<svg viewBox="0 0 60 38" aria-hidden="true">${R(0,0,60,38,'a',3)}${R(5,7,9,2,'w o')}${R(5,11,21,3.5,'w')}${R(5,17,19,2,'w o')}${R(5,21,15,2,'w o')}${R(5,27,9,4,'w',1.5)}${R(32,5,23,25,'w',2)}${R(35,8,17,19,'i',1)}</svg>`,
+ center:SV(R(25,4,10,2,'a')+R(13,8,34,3.5,'d')+R(17,14,26,2,'l')+R(24,18,12,3.5,'a',1.5)+GRID(6,25,48,9,5,1)),
+ minimal:SV(R(5,7,12,2,'a')+R(5,12,46,5,'d')+R(5,19,36,5,'d')+R(5,28,32,2,'l')),
+ gtop:SV(R(4,4,52,6,'w',1.5)+R(6,5.5,15,3,'l')+R(23,5.5,15,3,'l')+R(47,5.5,7,3,'a')+GRID(4,13,52,21,5,2)),
+ gleft:SV(R(4,4,14,30,'w',1.5)+[0,1,2,3,4,5,6].map(j=>R(6,7+j*3.6,9,1.8,j==1?'a':'l')).join('')+GRID(21,4,35,30,3,2)),
+ gright:SV(GRID(4,4,35,30,3,2)+R(42,4,14,30,'w',1.5)+[0,1,2,3,4,5,6].map(j=>R(44,7+j*3.6,9,1.8,j==1?'a':'l')).join('')),
+ gpills:SV([[4,8],[13,10],[24,7],[32,9],[42,8],[51,5]].map(([x,w],j)=>R(x,4,w,4,j==1?'a':'w',2)).join('')+GRID(4,12,52,22,5,2)),
+ gnone:SV(GRID(4,4,52,30,5,2)),
+ kcards:SV(GRID(4,6,52,26,5,1,'w')+[0,1,2,3,4].map(j=>R(5.5+j*10.8,9,7.5,7,'i',1)+R(5.5+j*10.8,19,7,1.8,'l')+R(5.5+j*10.8,23,5,1.8,'a')).join('')),
+ ktiles:SV(GRID(4,4,52,30,5,2,'w')+[0,1].map(r=>[0,1,2,3,4].map(j=>R(5.3+j*10.8,5.5+r*16,8,9,'i',1)+R(6+j*10.8,16.5+r*16,6.5,1.6,'l')).join('')).join('')),
+ kpills:SV([[4,13],[19,11],[32,15],[49,8],[4,10],[16,14],[32,12],[46,10]].map(([x,w],j)=>R(x,j<4?10:18,w,5,'w',2.5)+R(x+1,(j<4?10:18)+1,3,3,'i',1.5)).join('')),
+ hclassic:SV(R(4,6,13,4,'d')+R(21,5.5,20,5,'w',2.5)+R(46,5.5,10,2,'l')+R(46,8.5,10,2,'d')+[0,1,2,3,4,5].map(j=>R(4+j*9,15,7,2,j==1?'a':'l')).join('')+R(0,20,60,18,'w',0)),
+ hcenter:SV(R(4,6,14,4,'w',2)+R(23,5,14,6,'d')+R(46,6,10,4,'l')+[0,1,2,3,4].map(j=>R(9+j*9,15,7,2,j==1?'a':'l')).join('')+R(0,20,60,18,'w',0)),
+ hcompact:SV(R(4,7,11,4,'d')+[0,1,2,3,4].map(j=>R(19+j*7,8,5.5,2,j==1?'a':'l')).join('')+R(54,8,3,2,'l')+R(0,16,60,22,'w',0)),
+ ctarose:`<svg viewBox="0 0 60 38" aria-hidden="true">${R(0,0,60,38,'bg',3)}${R(4,10,52,18,'a',3)}${R(8,15,24,3,'w')}${R(8,20,18,2,'w o')}${R(40,16,12,6,'w',1.5)}</svg>`,
+ ctadark:`<svg viewBox="0 0 60 38" aria-hidden="true">${R(0,0,60,38,'bg',3)}${R(4,10,52,18,'k',3)}${R(8,15,24,3,'w')}${R(8,20,18,2,'w o')}${R(40,16,12,6,'w',1.5)}</svg>`,
+ ctalight:`<svg viewBox="0 0 60 38" aria-hidden="true">${R(0,0,60,38,'bg',3)}${R(4,10,52,18,'p',3)}${R(8,15,24,3,'d')}${R(8,20,18,2,'l')}${R(40,16,12,6,'a',1.5)}</svg>`,
+};
+
+/* ---------- Définition des blocs ---------- */
+const wrapS=(band,inner,attrs='')=>`<section class="section${band?' band':''}"${attrs}><div class="wrap">${inner}</div></section>`;
+const lbl=(o,v)=>{const c=(o.ch||[]).find(x=>x[0]===v);return c?c[1]:''};
+const DEFS={
+ announce:{name:'Bandeau d’information',icon:'!',group:'En-tête',desc:'Petite bande de message tout en haut de la page.',
+  d:{tone:'jaune'},o:[{k:'tone',l:'Couleur',type:'seg',ch:[['jaune','Jaune'],['rose','Couleur principale'],['sombre','Sombre']]}],
+  r:(s,T)=>`<div class="demo an-${s.tone}">${T('txt','Prototype interactif interne · aucune demande n’est envoyée')}</div>`},
+ header:{name:'En-tête & menu',icon:'☰',group:'En-tête',desc:'Logo, recherche, téléphone et navigation.',
+  d:{variant:'classique',search:true,phone:true,sticky:false},
+  o:[{k:'variant',l:'Disposition',type:'tiles',ch:[['classique','Classique','hclassic'],['centre','Logo centré','hcenter'],['compact','Compact','hcompact']]},
+     {k:'search',l:'Barre de recherche',type:'tog',when:s=>s.variant!=='compact'},{k:'phone',l:'Téléphone',type:'tog'},{k:'sticky',l:'Reste visible au défilement',type:'tog'}],
+  r:(s,T,c)=>{const logo=`<img alt="Kontfeel – Marketing point de vente" class="logo" src="${c.U('logo')}">`;
+   const search=`<form class="search kf-search" role="search"><input aria-label="Rechercher un produit" placeholder="Trouver un produit"><button type="submit" aria-label="Rechercher" style="border:0;background:none;color:var(--pink)">⌕</button></form>`;
+   const phone=`<a class="phone" href="tel:+33278775393">${T('ph1','Un conseil ou une commande ?','small')}${T('ph2','02 78 77 53 93','strong')}</a>`;
+   if(s.variant==='compact')return`<header class="h-compact"><div class="wrap top">${logo}<nav class="nav" aria-label="Menu principal">${NAV}</nav>${s.phone?phone:''}</div></header>`;
+   if(s.variant==='centre')return`<header class="h-center"><div class="wrap top">${s.search?search:'<span></span>'}${logo}${s.phone?phone:'<span></span>'}</div><nav class="wrap nav" aria-label="Menu principal">${NAV}</nav></header>`;
+   return`<header><div class="wrap top">${logo}${s.search?search:''}${s.phone?phone:''}</div><nav class="wrap nav" aria-label="Menu principal">${NAV}</nav></header>`}},
+ crumb:{name:'Fil d’Ariane',icon:'›',group:'En-tête',desc:'Chemin de navigation au-dessus du titre.',d:{},o:[],
+  r:(s,T)=>`<div class="wrap crumb">${T('c','Accueil › Présentoir comptoir')}</div>`},
+ hero:{name:'Bannière',icon:'▣',group:'En-tête',desc:'Titre principal, accroche, boutons et photos.',
+  d:{variant:'split',tone:'gris',slide:'both',thumbs:true,buttons:true},
+  o:[{k:'variant',l:'Style de bannière',type:'tiles',ch:[['split','Image à droite','split'],['split-left','Image à gauche','splitleft'],['immersive','Fond coloré','immersive'],['center','Centrée','center'],['minimal','Texte seul','minimal']]},
+     {k:'slide',l:'Défilement des photos',type:'seg',when:s=>['split','split-left','immersive'].includes(s.variant),ch:[['thumbs','Manuel'],['auto','Automatique'],['arrows','Flèches'],['both','Auto + flèches']],help:'Le défilement automatique change de photo toutes les 4,5 s et se met en pause au survol. Sur mobile, on peut aussi glisser du doigt.'},
+     {k:'thumbs',l:'Miniatures sous la photo',type:'tog',when:s=>s.variant!=='minimal'},
+     {k:'tone',l:'Fond',type:'seg',when:s=>['split','split-left','center'].includes(s.variant),ch:[['gris','Gris clair'],['rose','Teinté'],['blanc','Blanc']]},
+     {k:'buttons',l:'Boutons d’action',type:'tog'}],
+  sum:s=>lbl(DEFS.hero.o[0],s.variant)+(['split','split-left','immersive'].includes(s.variant)?' · '+lbl(DEFS.hero.o[1],s.slide):''),
+  r:(s,T,c)=>{
+   const text=`<div class="hero-txt">${T('eye','FABRICANT DE PLV SUR MESURE','span',' class="eyebrow"')}${T('h1','Présentoirs de comptoir sur mesure','h1')}${T('p','Valorisez vos produits directement en point de vente. Kontfeel conçoit et fabrique vos présentoirs de comptoir personnalisés en carton, bois, métal et plastique, adaptés à votre marque, à vos produits et à votre réseau de distribution.','p')}${s.buttons?`<div class="actions"><button class="btn quote">${T('b1','Demander une étude →')}</button><a class="btn secondary" href="#galerie">${T('b2','Voir nos réalisations')}</a></div>`:''}</div>`;
+   if(s.variant==='minimal')return`<div class="wrap"><section class="hero v-minimal">${text}</section></div>`;
+   if(s.variant==='center')return`<div class="wrap"><section class="hero v-center t-${s.tone}">${text}${s.thumbs?`<div class="hero-strip">${[0,1,2,3,4].map(j=>`<img src="${c.U('h'+j)}" alt="${esc(HERO[j].alt)}" loading="lazy">`).join('')}</div>`:''}</section></div>`;
+   const auto=s.slide==='auto'||s.slide==='both',arrows=s.slide==='arrows'||s.slide==='both';
+   const media=`<div class="hero-media" data-kf="hero" data-auto="${auto?1:0}"><div class="slider"><img alt="${esc(HERO[0].alt)}" class="hero-photo" fetchpriority="high" src="${c.U('h0')}">${arrows?'<button type="button" class="arrow prev" aria-label="Photo précédente">‹</button><button type="button" class="arrow next" aria-label="Photo suivante">›</button>':''}${!s.thumbs&&(auto||arrows)?'<div class="dots"></div>':''}</div>${s.thumbs?'<div class="thumbs"></div>':''}</div>`;
+   if(s.variant==='immersive')return`<section class="hero-full"><div class="wrap hero v-immersive">${text}${media}</div></section>`;
+   return`<div class="wrap"><section class="hero v-${s.variant} t-${s.tone}">${text}${media}</section></div>`}},
+ benefits:{name:'Réassurance',icon:'✓',group:'Contenu',desc:'Quatre arguments clés sous la bannière.',
+  d:{variant:'ligne'},o:[{k:'variant',l:'Style',type:'seg',ch:[['ligne','Ligne simple'],['cartes','Cartes'],['bande','Bande colorée']]}],sum:s=>lbl(DEFS.benefits.o[0],s.variant),
+  r:(s,T)=>{const it=['Conception sur mesure','Fabrication française','Multi-matériaux','Accompagnement de A à Z'].map((d,i)=>`<div><span>✓</span>${T('b'+i,d)}</div>`).join('');
+   return s.variant==='bande'?`<div class="benefits-band"><div class="wrap"><div class="benefits">${it}</div></div></div>`:`<div class="wrap"><div class="benefits v-${s.variant}">${it}</div></div>`}},
+ gammes:{name:'Gammes de produits',icon:'▦',group:'Catalogue',desc:'Les 10 familles de présentoirs. Un clic filtre la galerie.',
+  d:{variant:'cartes',cols:'5',desc:true},
+  o:[{k:'variant',l:'Affichage',type:'tiles',ch:[['cartes','Cartes','kcards'],['tuiles','Grandes tuiles','ktiles'],['pastilles','Pastilles','kpills']]},
+     {k:'cols',l:'Colonnes',type:'seg',when:s=>s.variant!=='pastilles',ch:[['2','2'],['3','3'],['4','4'],['5','5']]},
+     {k:'desc',l:'Descriptions',type:'tog',when:s=>s.variant!=='pastilles'}],
+  sum:s=>lbl(DEFS.gammes.o[0],s.variant)+(s.variant!=='pastilles'?' · '+s.cols+' colonnes':''),
+  r:(s,T,c)=>{let g;
+   if(s.variant==='pastilles')g=`<div class="catpills">${CATS.map((x,i)=>`<button class="cat pill" data-cat="${esc(x[0])}"><img alt="" loading="lazy" src="${c.U('c'+i)}"><span>${esc(x[0])}</span></button>`).join('')}</div>`;
+   else if(s.variant==='tuiles')g=`<div class="cats" data-cols="${s.cols}">${CATS.map((x,i)=>`<button class="cat tile" data-cat="${esc(x[0])}"><img alt="Exemple de ${esc(x[0].toLowerCase())}" loading="lazy" src="${c.U('c'+i)}"><span>${esc(x[0])}${s.desc?`<small>${esc(x[1])}</small>`:''}</span></button>`).join('')}</div>`;
+   else g=`<div class="cats" data-cols="${s.cols}">${CATS.map((x,i)=>`<article class="catwrap"><button class="cat" data-cat="${esc(x[0])}"><img alt="Exemple de ${esc(x[0].toLowerCase())}" loading="lazy" src="${c.U('c'+i)}"><span>${esc(x[0])}</span><b>→</b></button>${s.desc?T('d'+i,x[1],'p'):''}<a class="familylink" href="${x[2]}" rel="noopener" target="_blank">Découvrir la gamme ↗</a></article>`).join('')}</div>`;
+   return`<section class="section wrap"${c.once('gammes')}><div class="heading">${T('h','Nos gammes de présentoirs de comptoir','h2')}</div>${T('sub','Choisissez une famille pour filtrer les réalisations ou découvrez ses solutions détaillées.','p',' class="sub"')}${g}</section>`}},
+ galerie:{name:'Galerie de réalisations',icon:'⊞',group:'Catalogue',desc:'Les réalisations avec leurs filtres.',
+  d:{filter:'top',sectors:true,cols:'6',per:'12',card:'bordure',count:true},
+  o:[{k:'filter',l:'Position des filtres',type:'tiles',ch:[['top','Menus en haut','gtop'],['left','Colonne à gauche','gleft'],['right','Colonne à droite','gright'],['pills','Pastilles en haut','gpills'],['none','Sans filtre','gnone']]},
+     {k:'sectors',l:'Filtrer aussi par secteur',type:'tog',when:s=>s.filter!=='none'},
+     {k:'cols',l:'Colonnes (ordinateur)',type:'seg',ch:[['3','3'],['4','4'],['5','5'],['6','6']]},
+     {k:'per',l:'Réalisations affichées au départ',type:'seg',ch:[['6','6'],['12','12'],['18','18'],['24','24']]},
+     {k:'card',l:'Style des cartes',type:'seg',ch:[['bordure','Bordure'],['ombre','Ombre'],['epure','Épuré']]},
+     {k:'count',l:'Compteur de résultats',type:'tog'}],
+  sum:s=>lbl(DEFS.galerie.o[0],s.filter)+' · '+s.cols+' colonnes',
+  r:(s,T,c)=>{const grid=`<div class="status${s.count?'':' sr-only'}" aria-live="polite"></div><div class="gallery"></div><div class="center"><button type="button" class="btn secondary kf-more">${T('more','Afficher plus de réalisations +')}</button></div>`;
+   const side=s.filter==='left'||s.filter==='right';
+   return`<section class="section wrap kf-gal f-${s.filter} c-${s.card}${c.sticky?'':' stick'}"${c.once('galerie')} data-kf="gallery" data-filter="${s.filter}" data-sectors="${s.sectors?1:0}" data-per="${s.per}" data-cols="${s.cols}" style="padding-top:5px"><div class="heading">${T('h','Nos réalisations de présentoirs de comptoir','h2')}</div>${T('sub','Trouvez l’inspiration en combinant vos critères de recherche.','p',' class="sub"')}${side?`<div class="gallery-layout"><aside class="gallery-sidebar kf-filters"></aside><div class="gallery-results">${grid}</div></div>`:`<div class="kf-filters"></div>${grid}`}</section>`}},
+ contenu:{name:'Texte & matériaux',icon:'¶',group:'Contenu',desc:'Texte de présentation et choix des matériaux.',
+  d:{variant:'deux',band:true},o:[{k:'variant',l:'Contenu',type:'seg',ch:[['deux','Texte + matériaux'],['texte','Texte seul'],['materiaux','Matériaux seuls']]},{k:'band',l:'Fond gris',type:'tog'}],sum:s=>lbl(DEFS.contenu.o[0],s.variant),
+  r:(s,T)=>{const txt=`<div>${T('eye','UNE SOLUTION POUR CHAQUE BESOIN','span',' class="eyebrow"')}${T('h','Le présentoir de comptoir : une PLV conçue pour valoriser vos produits','h2')}${T('p1','Installé sur une caisse, un comptoir ou une table de présentation, le présentoir de comptoir met vos produits au plus près du consommateur sans mobiliser une surface importante en magasin.','p')}${T('p2','Adapté aux lancements de produits, aux opérations promotionnelles et aux gammes permanentes, ce support PLV contribue à renforcer la visibilité de votre marque et à favoriser les achats d’impulsion.','p')}${T('h3','Des présentoirs de comptoir personnalisés à votre image','h3')}${T('p3','Dimensions, nombre de niveaux, empreintes, frontons publicitaires, couleurs et finitions : nos équipes étudient un support adapté à vos produits, à votre identité visuelle et aux contraintes de vos points de vente.','p')}<button class="btn secondary quote">${T('b','Échanger sur votre projet →')}</button></div>`;
+   const mats=`<div>${T('mh','Quel matériau choisir pour votre présentoir de comptoir ?','h3')}${T('mp','Le choix dépend du poids des produits, de la durée de l’opération, du rendu et du budget.','p')}<div class="materials">${MATS.map((m,i)=>`<div class="material"><div class="swatch ${m[0]}"></div>${T('mn'+i,m[1],'h3')}${T('md'+i,m[2],'p')}${m[3]?`<a class="familylink" href="${m[3]}" rel="noopener" target="_blank">Présentoir comptoir carton ↗</a>`:''}</div>`).join('')}</div></div>`;
+   return wrapS(s.band,`<div class="${s.variant==='deux'?'split':s.variant==='texte'?'single':'mat-only'}">${s.variant!=='materiaux'?txt:''}${s.variant!=='texte'?mats:''}</div>`)}},
+ secteurs:{name:'Secteurs d’activité',icon:'◫',group:'Contenu',desc:'Cartes par univers client.',
+  d:{cols:'3',style:'image',band:false},o:[{k:'style',l:'Style',type:'seg',ch:[['image','Avec photo'],['texte','Texte seul']]},{k:'cols',l:'Colonnes',type:'seg',ch:[['2','2'],['3','3']]},{k:'band',l:'Fond gris',type:'tog'}],sum:s=>lbl(DEFS.secteurs.o[0],s.style)+' · '+s.cols+' colonnes',
+  r:(s,T,c)=>wrapS(s.band,`${T('h','Des présentoirs de comptoir adaptés à votre secteur','h2')}${T('sub','Des solutions pensées pour vos produits et vos points de vente.','p',' class="sub"')}<div class="sectorgrid${s.style==='texte'?' simple':''}" data-cols="${s.cols}">${SECTORS.map((x,i)=>`<article class="sectorcard">${s.style==='texte'?'':x[3]?`<img alt="${esc(x[4])}" loading="lazy" src="${c.U(x[3])}">`:'<div aria-hidden="true" class="sectorblank">PLV<br>sur mesure</div>'}<div>${T('sn'+i,x[0],'h3')}${T('sd'+i,x[1],'p')}<a class="familylink" href="${x[2]}" rel="noopener" target="_blank">Découvrir nos solutions ↗</a></div></article>`).join('')}</div>`,c.once('secteurs'))},
+ etapes:{name:'Étapes du projet',icon:'⇢',group:'Contenu',desc:'Du brief à la livraison, en 5 étapes.',
+  d:{variant:'horizontal',band:true},o:[{k:'variant',l:'Disposition',type:'seg',ch:[['horizontal','En ligne'],['vertical','Frise verticale']]},{k:'band',l:'Fond gris',type:'tog'}],sum:s=>lbl(DEFS.etapes.o[0],s.variant),
+  r:(s,T)=>wrapS(s.band,`${T('h','Conception et fabrication de votre présentoir','h2')}${T('sub','Du brief à la livraison, les étapes de votre projet.','p',' class="sub"')}<div class="steps${s.variant==='vertical'?' vertical':''}">${STEPS.map((x,i)=>`<div class="step"><b>0${i+1}</b>${T('st'+i,x[0],'h3')}${T('sd'+i,x[1],'p')}</div>`).join('')}</div>`)},
+ cas:{name:'Cas clients',icon:'★',group:'Contenu',desc:'Trois projets mis en avant.',
+  d:{variant:'cartes',band:false},o:[{k:'variant',l:'Disposition',type:'seg',ch:[['cartes','3 cartes'],['lignes','Lignes alternées']]},{k:'band',l:'Fond gris',type:'tog'}],sum:s=>lbl(DEFS.cas.o[0],s.variant),
+  r:(s,T,c)=>wrapS(s.band,`${T('h','Des projets concrets, pour différents univers','h2')}${T('sub','Trois exemples déjà présentés sur le site de Kontfeel.','p',' class="sub"')}<div class="cases${s.variant==='lignes'?' rows':''}">${CASES.map(([i,k,d],j)=>`<article class="case"><img alt="${esc(PRODUCTS[i].alt)}" loading="lazy" src="${c.U(k)}"><div><span class="tag">PLV de comptoir</span><h3>${esc(PRODUCTS[i].name)}</h3>${T('cd'+j,d,'p')}<button class="reset" data-case="${i}">Découvrir →</button></div></article>`).join('')}</div>`)},
+ faq:{name:'Questions fréquentes',icon:'?',group:'Conversion',desc:'Huit questions avec réponses dépliables.',
+  d:{cols:'2',band:true},o:[{k:'cols',l:'Colonnes',type:'seg',ch:[['2','2 colonnes'],['1','1 colonne']]},{k:'band',l:'Fond gris',type:'tog'}],sum:s=>s.cols==='1'?'1 colonne':'2 colonnes',
+  r:(s,T)=>wrapS(s.band,`${T('h','Vos questions sur les présentoirs de comptoir','h2')}<div class="faq-grid${s.cols==='1'?' one':''}">${FAQ.map((x,i)=>`<details><summary>${T('q'+i,x[0])}</summary>${T('a'+i,x[1],'p')}</details>`).join('')}</div>`)},
+ avis:{name:'Avis clients',icon:'☆',group:'Conversion',desc:'Note moyenne et nombre d’avis.',
+  d:{variant:'encadre'},o:[{k:'variant',l:'Style',type:'seg',ch:[['encadre','Encadré'],['rose','Fond teinté']]}],
+  r:(s,T)=>`<section class="section wrap" style="padding-bottom:0"><div class="rating${s.variant==='rose'?' r-rose':''}">${T('n','4,9 / 5','strong')}<div><div class="stars">★★★★★</div>${T('l','200+ avis Google','div')}</div></div></section>`},
+ cta:{name:'Appel à l’action',icon:'➜',group:'Conversion',desc:'Bandeau qui ouvre le formulaire de devis.',
+  d:{variant:'rose'},o:[{k:'variant',l:'Style',type:'tiles',ch:[['rose','Couleur','ctarose'],['sombre','Sombre','ctadark'],['clair','Clair','ctalight']]}],sum:s=>lbl(DEFS.cta.o[0],s.variant),
+  r:(s,T)=>`<section class="section wrap"><div class="cta cta-${s.variant}"><div>${T('h','Un projet de présentoir comptoir ? Parlons-en.','h2')}${T('p','Décrivez votre besoin, nous étudierons la solution adaptée.','p',' style="margin:0"')}</div><button class="btn quote">${T('b','Demander un devis →')}</button></div></section>`},
+ footer:{name:'Pied de page',icon:'▁',group:'Mise en page',desc:'Logo, contact et liens.',
+  d:{variant:'sombre'},o:[{k:'variant',l:'Style',type:'seg',ch:[['sombre','Sombre'],['clair','Clair']]}],sum:s=>lbl(DEFS.footer.o[0],s.variant),
+  r:(s,T,c)=>`<footer class="${s.variant==='clair'?'f-light':''}"><div class="wrap"><div style="max-width:370px"><img alt="Kontfeel" src="${c.U(s.variant==='clair'?'logo':'foot')}" width="220">${T('d','Conception et fabrication de solutions PLV sur mesure.','p')}</div><div><strong>Contact</strong><p>${T('c1','02 78 77 53 93')}<br>${T('c2','Normandie, France')}</p></div><div><strong>Informations</strong><p><a href="https://www.kontfeel.fr/" target="_blank" rel="noopener">Site actuel ↗</a><br><a href="#gammes">Nos gammes</a></p></div></div></footer>`},
+ texte:{name:'Texte libre',icon:'T',group:'Mise en page',desc:'Un titre et un paragraphe à écrire vous-même.',
+  d:{align:'left',band:false},o:[{k:'align',l:'Alignement',type:'seg',ch:[['left','À gauche'],['center','Centré']]},{k:'band',l:'Fond gris',type:'tog'}],
+  r:(s,T)=>wrapS(s.band,`<div class="kf-text al-${s.align}">${T('h','Votre titre ici','h2')}${T('p','Cliquez sur ce texte pour le remplacer par votre contenu.','p')}</div>`)},
+ media:{name:'Image + texte',icon:'◧',group:'Mise en page',desc:'Une photo à côté d’un texte et d’un bouton.',
+  d:{img:'h1',side:'left',band:false},o:[{k:'img',l:'Photo',type:'img'},{k:'side',l:'Position de la photo',type:'seg',ch:[['left','À gauche'],['right','À droite']]},{k:'band',l:'Fond gris',type:'tog'}],
+  r:(s,T,c)=>wrapS(s.band,`<div class="split kf-media${s.side==='right'?' img-right':''}"><img class="media-img" src="${c.U(s.img)}" alt="" loading="lazy"><div>${T('eye','SAVOIR-FAIRE','span',' class="eyebrow"')}${T('h','Un bureau d’études intégré','h2')}${T('p','Nos équipes conçoivent, prototypent et fabriquent votre présentoir en France, du premier croquis jusqu’à la livraison en point de vente.','p')}<button class="btn quote">${T('b','Demander une étude →')}</button></div></div>`)},
+ espace:{name:'Espace / séparateur',icon:'↕',group:'Mise en page',desc:'Ajoute de l’air entre deux blocs.',
+  d:{size:'m',line:false},o:[{k:'size',l:'Hauteur',type:'seg',ch:[['s','Petit'],['m','Moyen'],['l','Grand']]},{k:'line',l:'Ligne de séparation',type:'tog'}],
+  r:s=>`<div class="kf-space sz-${s.size}">${s.line?'<div class="wrap"></div>':''}</div>`},
+};
+const GROUPS=['En-tête','Catalogue','Contenu','Conversion','Mise en page'];
+
+/* ---------- État ---------- */
+const B=(type,s={})=>({id:uid(),type,s,t:{}});
+function preset(n){
+ if(n===0)return[B('header'),B('hero',{variant:'minimal'}),B('texte'),B('footer')];
+ const filt={1:'top',2:'left',3:'pills'}[n];
+ return[B('announce'),B('header'),B('crumb'),B('hero'),B('benefits'),B('gammes'),B('galerie',{filter:filt,sectors:n!==3,cols:n===2?'5':'6'}),B('contenu'),B('secteurs'),B('etapes'),B('cas'),B('faq'),B('avis'),B('cta'),B('footer')];
+}
+const G0={accent:'#d3336c',corners:'round',font:'sans',width:'1250'};
+let state={v:1,g:{...G0},blocks:preset(1)};
+const ui={tab:'blocks',sel:null,view:'list',insertAt:null,preview:false};
+const KEY='kontfeel-p4';
+function valid(o){return o&&Array.isArray(o.blocks)&&o.blocks.every(b=>b&&DEFS[b.type])}
+function load(){
+ const m=location.hash.match(/^#l=(.+)$/);
+ if(m){try{const o=JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,'+').replace(/_/g,'/')))));if(valid(o)){history.replaceState(null,'',location.pathname);return o}}catch(e){}}
+ try{const o=JSON.parse(localStorage.getItem(KEY));if(valid(o))return o}catch(e){}
+ return null;
+}
+function norm(o){o.g={...G0,...(o.g||{})};o.blocks.forEach(b=>{b.id=b.id||uid();b.s=b.s||{};b.t=b.t||{}});return o}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}};
+let hist=[],hi=-1;
+function commit(rerender=true){hist=hist.slice(0,hi+1);hist.push(JSON.stringify(state));if(hist.length>80)hist.shift();hi=hist.length-1;save();if(rerender)render();else updUndo()}
+function undo(){if(hi>0){hi--;state=JSON.parse(hist[hi]);save();render()}}
+function redo(){if(hi<hist.length-1){hi++;state=JSON.parse(hist[hi]);save();render()}}
+const find=id=>state.blocks.find(b=>b.id===id);
+const idx=id=>state.blocks.findIndex(b=>b.id===id);
+const sv=b=>({...DEFS[b.type].d,...b.s});
+
+/* ---------- Images : data URI -> blob (léger pour l'aperçu) ---------- */
+const BLOB={};
+for(const k in ASSETS){try{const[h,b64]=ASSETS[k].split(',');const mime=h.slice(5).split(';')[0];const bin=atob(b64);const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);BLOB[k]=URL.createObjectURL(new Blob([u],{type:mime}))}catch(e){BLOB[k]=ASSETS[k]}}
+const dataFor=U=>({products:PRODUCTS.map(p=>({...p,img:p.img[0]==='@'?U(p.img.slice(1)):p.img})),categories:CATS.map(x=>x[0]),hero:HERO.map(h=>({src:U(h.k),alt:h.alt}))});
+
+/* ---------- Rendu de la page ---------- */
+function globalCSS(g){
+ let css=`#kf-root{--pink:${g.accent};--pale:${tint(g.accent,.9)};--pinkd:${shade(g.accent,.18)}}#kf-root .wrap{max-width:${g.width}px}`;
+ if(g.corners==='square')css+='#kf-root *:not(.arrow):not(.dots>button):not(.f-pill):not(.chip):not(.cat.pill):not(.cat.pill img){border-radius:2px!important}';
+ if(g.font==='serif')css+='#kf-root h1,#kf-root h2,#kf-root h3{font-family:Georgia,"Times New Roman",serif;letter-spacing:-.3px;font-weight:600}';
+ if(g.font==='bold')css+='#kf-root h1,#kf-root h2{font-weight:800;text-transform:uppercase;letter-spacing:-.4px}';
+ return css;
+}
+function pageHTML(c){
+ const seen={};c.once=id=>seen[id]?'':(seen[id]=1,` id="${id}"`);
+ const hb=state.blocks.find(b=>b.type==='header'&&!b.hidden);c.sticky=!!(hb&&sv(hb).sticky);
+ let out=c.edit?'<div class="kb-ins first"><button type="button" data-ins="0">+ Ajouter un bloc ici</button></div>':'';
+ state.blocks.forEach((b,i)=>{
+  const d=DEFS[b.type],s=sv(b);
+  const T=(k,def,tag='span',attrs='')=>`<${tag}${attrs} data-edit="${k}">${esc(b.t[k]!=null?b.t[k]:def)}</${tag}>`;
+  const stick=b.type==='header'&&s.sticky&&!b.hidden?' sticky':'';
+  if(!c.edit){if(!b.hidden)out+=`<div class="kb${stick}">${d.r(s,T,c)}</div>`;return}
+  const inner=b.hidden?`<div class="kb-hidden">Bloc masqué : ${esc(d.name)} — invisible sur la page publiée</div>`:d.r(s,T,c);
+  out+=`<div class="kb${stick}${b.id===ui.sel?' sel':''}" data-id="${b.id}"><div class="kb-bar"><span>${esc(d.name)}</span><button type="button" data-act="up" title="Monter">↑</button><button type="button" data-act="down" title="Descendre">↓</button><button type="button" data-act="set" title="Réglages">⚙</button><button type="button" data-act="dup" title="Dupliquer">⧉</button><button type="button" data-act="del" title="Supprimer">✕</button></div>${inner}</div><div class="kb-ins${i===state.blocks.length-1?' last':''}"><button type="button" data-ins="${i+1}">+ Ajouter un bloc ici</button></div>`;
+ });
+ if(c.edit&&!state.blocks.length)out='<div class="kb-ins last"><button type="button" data-ins="0">+ Ajouter un premier bloc</button></div>';
+ return out+DIALOGS;
+}
+let fwin,fdoc;
+const CE=(()=>{const d=document.createElement('div');d.contentEditable='plaintext-only';return d.contentEditable==='plaintext-only'?'plaintext-only':'true'})();
+function render(){
+ const c={U:k=>BLOB[k],edit:!ui.preview};
+ const root=fdoc.getElementById('kf-root'),y=fwin.scrollY;
+ root.innerHTML=pageHTML(c);
+ fdoc.getElementById('gcss').textContent=globalCSS(state.g);
+ fdoc.documentElement.classList.toggle('kb-edit',c.edit);
+ fwin.KF.init();
+ if(c.edit)fdoc.querySelectorAll('[data-edit]').forEach(el=>{el.setAttribute('contenteditable',CE);el.spellcheck=false});
+ fwin.scrollTo(0,y);
+ renderPanel();updUndo();
+}
+function bootFrame(){
+ const fr=$('#canvas');fwin=fr.contentWindow;fdoc=fr.contentDocument;
+ fdoc.open();fdoc.write('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>'+BASE_CSS+EXTRA_CSS+KB_CSS+'</style><style id="gcss"></style></head><body><div id="kf-root"></div></body></html>');fdoc.close();
+ const sc=fdoc.createElement('script');sc.textContent='window.KF_DATA='+safeJSON(dataFor(k=>BLOB[k]))+';('+KFRuntime.toString()+')();';fdoc.body.appendChild(sc);
+ fdoc.addEventListener('click',e=>{
+  const act=e.target.closest('[data-act]');if(act){e.preventDefault();e.stopPropagation();blockAct(act.dataset.act,act.closest('.kb').dataset.id);return}
+  const ins=e.target.closest('[data-ins]');if(ins){e.preventDefault();e.stopPropagation();ui.insertAt=+ins.dataset.ins;ui.tab='add';openPanel();renderPanel();return}
+  if(ui.preview)return;
+  if(e.target.closest('[data-edit]')){e.preventDefault();e.stopPropagation();return}
+  const a=e.target.closest('a[href]');if(a&&!a.getAttribute('href').startsWith('#')){e.preventDefault();e.stopPropagation();toast('Les liens sont désactivés en mode édition. Passez en Aperçu pour les tester.')}
+ },true);
+ fdoc.addEventListener('pointerdown',e=>{if(ui.preview)return;const kb=e.target.closest('.kb[data-id]');if(kb&&!e.target.closest('.kb-bar,.kb-ins'))select(kb.dataset.id,false)},true);
+ let tmr;fdoc.addEventListener('input',e=>{const el=e.target.closest&&e.target.closest('[data-edit]');if(!el)return;const b=find(el.closest('.kb').dataset.id);if(!b)return;b.t[el.dataset.edit]=el.textContent;save();clearTimeout(tmr);tmr=setTimeout(()=>{commit(false);if(ui.view==='settings')renderPanel()},600)});
+ fdoc.addEventListener('keydown',e=>{const el=e.target.closest&&e.target.closest('[data-edit]');if(el&&e.key==='Enter'){e.preventDefault();el.blur()}if(!el)keys(e)});
+ fdoc.addEventListener('paste',e=>{const el=e.target.closest&&e.target.closest('[data-edit]');if(el&&CE!=='plaintext-only'){e.preventDefault();fdoc.execCommand('insertText',false,(e.clipboardData||window.clipboardData).getData('text/plain'))}});
+}
+
+/* ---------- Actions ---------- */
+function flash(id){const el=fdoc.querySelector(`.kb[data-id="${id}"]`);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')}}
+function select(id,scroll){ui.sel=id;ui.view='settings';ui.tab='blocks';fdoc.querySelectorAll('.kb.sel').forEach(x=>x.classList.remove('sel'));const el=fdoc.querySelector(`.kb[data-id="${id}"]`);if(el)el.classList.add('sel');renderPanel();if(scroll)flash(id)}
+function move(id,d){const i=idx(id),j=i+d;if(i<0||j<0||j>=state.blocks.length)return;const[b]=state.blocks.splice(i,1);state.blocks.splice(j,0,b);commit();flash(id)}
+function dup(id){const i=idx(id);const b=JSON.parse(JSON.stringify(state.blocks[i]));b.id=uid();state.blocks.splice(i+1,0,b);ui.sel=b.id;commit();flash(b.id)}
+function del(id){const i=idx(id),name=DEFS[state.blocks[i].type].name;state.blocks.splice(i,1);if(ui.sel===id){ui.sel=null;ui.view='list'}commit();toast(`Bloc « ${name} » supprimé.`,true)}
+function vis(id){const b=find(id);b.hidden=!b.hidden;commit()}
+function addBlock(type){const b=B(type);let at=ui.insertAt!=null?ui.insertAt:ui.sel&&idx(ui.sel)>=0?idx(ui.sel)+1:state.blocks.length;if(ui.insertAt==null&&type!=='footer'){const f=state.blocks.findIndex(x=>x.type==='footer');if(!ui.sel&&f>=0)at=f}state.blocks.splice(at,0,b);ui.insertAt=null;ui.sel=b.id;ui.view='settings';ui.tab='blocks';commit();setTimeout(()=>flash(b.id),60)}
+function blockAct(a,id){if(a==='up')move(id,-1);else if(a==='down')move(id,1);else if(a==='dup')dup(id);else if(a==='del')del(id);else if(a==='set'){select(id,false);openPanel()}}
+
+/* ---------- Panneau ---------- */
+const IC={grip:'<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor"><circle cx="2.5" cy="3" r="1.4"/><circle cx="7.5" cy="3" r="1.4"/><circle cx="2.5" cy="8" r="1.4"/><circle cx="7.5" cy="8" r="1.4"/><circle cx="2.5" cy="13" r="1.4"/><circle cx="7.5" cy="13" r="1.4"/></svg>',
+ eye:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+ eyeoff:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18M10.6 5.1A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6C3.7 8.4 2 12 2 12s3.6 7 10 7a10 10 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
+ chev:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>'};
+function ctl(o,v){
+ if(o.type==='tog')return`<label class="ctl tog"><span>${o.l}</span><input type="checkbox" data-k="${o.k}"${v?' checked':''}><i></i></label>`;
+ if(o.type==='img')return`<div class="ctl"><div class="cl">${o.l}</div><div class="imgs">${IMGCHOICES.map(k=>`<button type="button" class="imgpick${v===k?' on':''}" data-k="${o.k}" data-v="${k}" aria-pressed="${v===k}"><img src="${BLOB[k]}" alt=""></button>`).join('')}</div></div>`;
+ const tiles=o.type==='tiles';
+ return`<div class="ctl"><div class="cl">${o.l}</div><div class="${tiles?'tiles':'seg2'}">${o.ch.map(([val,l,sk])=>`<button type="button" class="${tiles?'tile':''}${v===val?' on':''}" data-k="${o.k}" data-v="${val}" aria-pressed="${v===val}">${tiles?SK[sk]||'':''}<span>${l}</span></button>`).join('')}</div>${o.help?`<p class="help">${o.help}</p>`:''}</div>`;
+}
+function listHTML(){
+ return`<p class="hint">Glissez les blocs pour changer leur ordre. Cliquez sur un bloc pour choisir son style, et directement sur un texte de la page pour le modifier.</p><ol class="blist">${state.blocks.map(b=>{const d=DEFS[b.type],s=sv(b);return`<li class="brow${b.id===ui.sel?' sel':''}${b.hidden?' off':''}" draggable="true" data-id="${b.id}"><span class="grip" title="Glisser pour déplacer">${IC.grip}</span><span class="bico">${d.icon}</span><div class="bname" data-a="open">${esc(d.name)}<small>${esc(d.sum?d.sum(s):d.desc)}</small></div><button type="button" class="ib" data-a="vis" title="${b.hidden?'Afficher le bloc':'Masquer le bloc'}" aria-label="${b.hidden?'Afficher':'Masquer'} ${esc(d.name)}">${b.hidden?IC.eyeoff:IC.eye}</button><button type="button" class="ib" data-a="open" aria-label="Réglages ${esc(d.name)}">${IC.chev}</button></li>`}).join('')}</ol><button type="button" class="addbtn" data-a="gotoadd">+ Ajouter un bloc</button>`;
+}
+function settingsHTML(b){
+ const d=DEFS[b.type],s=sv(b);
+ let h=`<button type="button" class="back" data-a="back">← Tous les blocs</button><div class="shead"><span class="bico lg">${d.icon}</span><div><h3>${esc(d.name)}</h3><p>${esc(d.desc)}</p></div></div>`;
+ d.o.filter(o=>!o.when||o.when(s)).forEach(o=>h+=ctl(o,s[o.k]));
+ if(!d.o.length)h+='<p class="hint">Ce bloc n’a pas de réglage de style. Cliquez sur son texte dans la page pour le modifier.</p>';
+ if(Object.keys(b.t).length)h+=`<button type="button" class="linkbtn" data-a="resettxt">Rétablir les textes d’origine de ce bloc</button>`;
+ return h+`<div class="sactions"><button type="button" data-a="up">↑ Monter</button><button type="button" data-a="down">↓ Descendre</button><button type="button" data-a="dup">Dupliquer</button><button type="button" data-a="vis">${b.hidden?'Afficher':'Masquer'}</button><button type="button" class="danger" data-a="del">Supprimer ce bloc</button></div>`;
+}
+function addHTML(){
+ let h=ui.insertAt!=null?`<div class="insnote">Insertion en position ${ui.insertAt+1}<button type="button" data-a="cancelins">Annuler</button></div>`:`<p class="hint">Le bloc sera ajouté ${ui.sel?'après le bloc sélectionné':'avant le pied de page'}. Vous pouvez aussi survoler la page et cliquer sur « + Ajouter un bloc ici ».</p>`;
+ GROUPS.forEach(g=>{h+=`<div class="grp">${g}</div><div class="addgrid">`+Object.entries(DEFS).filter(([,d])=>d.group===g).map(([k,d])=>`<button type="button" class="additem" data-a="add" data-type="${k}"><span class="bico lg">${d.icon}</span><span><b>${esc(d.name)}</b><small>${esc(d.desc)}</small></span></button>`).join('')+'</div>'});
+ return h;
+}
+const ACCENTS=[['#d3336c','Rose Kontfeel'],['#2f5bea','Bleu'],['#1f8a5b','Vert'],['#e0641b','Orange'],['#6b3fd4','Violet'],['#19192d','Encre']];
+function styleHTML(){
+ const g=state.g,sg=(k,ch)=>`<div class="seg2">${ch.map(([v,l])=>`<button type="button" class="${g[k]===v?'on':''}" data-g="${k}" data-gv="${v}" aria-pressed="${g[k]===v}">${l}</button>`).join('')}</div>`;
+ return`<div class="grp">Partir d’un modèle</div><div class="presets"><button type="button" class="preset" data-a="preset" data-n="1"><b>Prototype 1</b><small>Filtres en menus déroulants en haut</small></button><button type="button" class="preset" data-a="preset" data-n="2"><b>Prototype 2</b><small>Filtres visibles dans une colonne à gauche</small></button><button type="button" class="preset" data-a="preset" data-n="3"><b>Prototype 3</b><small>Types de PLV en pastilles en haut</small></button><button type="button" class="preset" data-a="preset" data-n="0"><b>Page presque vide</b><small>En-tête, bannière, texte et pied de page</small></button></div>
+ <div class="grp">Couleur principale</div><div class="swatches">${ACCENTS.map(([v,l])=>`<button type="button" class="sw${g.accent.toLowerCase()===v?' on':''}" style="background:${v}" data-g="accent" data-gv="${v}" title="${l}" aria-label="${l}"></button>`).join('')}<input type="color" id="accentPick" value="${g.accent}" title="Couleur personnalisée" aria-label="Couleur personnalisée"></div>
+ <div class="grp">Coins</div>${sg('corners',[['round','Arrondis'],['square','Carrés']])}
+ <div class="grp">Titres</div>${sg('font',[['sans','Actuels'],['serif','Élégants (serif)'],['bold','Gras majuscules']])}
+ <div class="grp">Largeur du contenu</div>${sg('width',[['1100','Étroite'],['1250','Normale'],['1440','Large']])}
+ <div class="grp">Remise à zéro</div><button type="button" class="danger-link" data-a="resetall">Tout réinitialiser (modèle Prototype 1)</button>`;
+}
+function renderPanel(){
+ document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===ui.tab));
+ const P=$('#pbody'),b=ui.sel&&find(ui.sel);
+ P.innerHTML=ui.tab==='add'?addHTML():ui.tab==='style'?styleHTML():(ui.view==='settings'&&b)?settingsHTML(b):listHTML();
+}
+const pb=$('#pbody');
+pb.addEventListener('click',e=>{
+ const kv=e.target.closest('[data-k][data-v]');if(kv){const b=find(ui.sel);if(b){b.s={...b.s,[kv.dataset.k]:kv.dataset.v};commit()}return}
+ const gv=e.target.closest('[data-g][data-gv]');if(gv){state.g[gv.dataset.g]=gv.dataset.gv;commit();return}
+ const a=e.target.closest('[data-a]');if(!a)return;const row=a.closest('[data-id]'),id=row?row.dataset.id:ui.sel;
+ switch(a.dataset.a){
+  case'open':select(id,true);closePanelM();break;
+  case'vis':vis(id);break;
+  case'back':ui.view='list';renderPanel();break;
+  case'gotoadd':ui.tab='add';ui.insertAt=null;renderPanel();break;
+  case'cancelins':ui.insertAt=null;renderPanel();break;
+  case'up':move(id,-1);break;case'down':move(id,1);break;case'dup':dup(id);break;case'del':del(id);break;
+  case'resettxt':find(id).t={};commit();break;
+  case'add':addBlock(a.dataset.type);closePanelM();break;
+  case'preset':if(confirm('Remplacer la mise en page actuelle par ce modèle ? (Annuler reste possible avec ↶)')){state.blocks=preset(+a.dataset.n);ui.sel=null;ui.view='list';ui.tab='blocks';commit();fwin.scrollTo(0,0)}break;
+  case'resetall':if(confirm('Tout réinitialiser ? Les textes modifiés et les styles seront perdus (↶ permet d’annuler).')){state={v:1,g:{...G0},blocks:preset(1)};ui.sel=null;ui.view='list';ui.tab='blocks';commit();fwin.scrollTo(0,0)}break;
+ }
+});
+pb.addEventListener('change',e=>{const t=e.target;if(t.matches('input[type=checkbox][data-k]')){const b=find(ui.sel);if(b){b.s={...b.s,[t.dataset.k]:t.checked};commit()}}if(t.id==='accentPick'){state.g.accent=t.value;commit()}});
+pb.addEventListener('input',e=>{if(e.target.id==='accentPick')fdoc.getElementById('gcss').textContent=globalCSS({...state.g,accent:e.target.value})});
+let dragId=null;
+pb.addEventListener('dragstart',e=>{const li=e.target.closest('.brow');if(!li)return;dragId=li.dataset.id;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',dragId)}catch(_){}li.classList.add('dragging')});
+const clearDrop=()=>pb.querySelectorAll('.dropbefore,.dropafter').forEach(x=>x.classList.remove('dropbefore','dropafter'));
+pb.addEventListener('dragover',e=>{const li=e.target.closest('.brow');if(!li||!dragId)return;e.preventDefault();const r=li.getBoundingClientRect();clearDrop();li.classList.add(e.clientY>r.top+r.height/2?'dropafter':'dropbefore')});
+pb.addEventListener('drop',e=>{const li=e.target.closest('.brow');if(!li||!dragId)return;e.preventDefault();const after=li.classList.contains('dropafter'),from=idx(dragId);const[b]=state.blocks.splice(from,1);let to=idx(li.dataset.id);if(to<0){state.blocks.splice(from,0,b);return}state.blocks.splice(after?to+1:to,0,b);dragId=null;commit();flash(b.id)});
+pb.addEventListener('dragend',()=>{dragId=null;clearDrop();pb.querySelectorAll('.dragging').forEach(x=>x.classList.remove('dragging'))});
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{ui.tab=b.dataset.tab;if(ui.tab==='blocks')ui.view=ui.view;renderPanel()});
+
+/* ---------- Barre d'outils ---------- */
+const app=$('#app');
+function openPanel(){app.classList.add('panel-open')}
+function closePanelM(){if(matchMedia('(max-width:900px)').matches)app.classList.remove('panel-open')}
+$('#openPanel').onclick=openPanel;$('#closePanel').onclick=()=>app.classList.remove('panel-open');
+document.querySelectorAll('#devices button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#devices button').forEach(x=>x.classList.toggle('on',x===b));$('#canvas').style.width=b.dataset.w});
+function updUndo(){$('#undo').disabled=hi<=0;$('#redo').disabled=hi>=hist.length-1}
+$('#undo').onclick=undo;$('#redo').onclick=redo;
+$('#previewBtn').onclick=()=>{ui.preview=!ui.preview;app.classList.toggle('previewing',ui.preview);$('#previewBtn').classList.toggle('on',ui.preview);$('#previewBtn').innerHTML=ui.preview?'✎ <span class="lbl">Modifier</span>':'◉ <span class="lbl">Aperçu</span>';render()};
+function keys(e){const m=e.metaKey||e.ctrlKey;if(m&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo()}else if(m&&e.key.toLowerCase()==='y'){e.preventDefault();redo()}}
+document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea'))return;keys(e)});
+let tt;function toast(msg,withUndo){$('#toastMsg').textContent=msg;$('#toastUndo').hidden=!withUndo;$('#toast').classList.add('show');clearTimeout(tt);tt=setTimeout(()=>$('#toast').classList.remove('show'),4500)}
+$('#toastUndo').onclick=()=>{undo();$('#toast').classList.remove('show')};
+$('#shareBtn').onclick=async()=>{
+ const enc=btoa(unescape(encodeURIComponent(JSON.stringify(state)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+ const url=location.href.split('#')[0]+'#l='+enc;
+ try{await navigator.clipboard.writeText(url);toast('Lien copié : il ouvre exactement cette mise en page.')}catch(e){prompt('Copiez ce lien :',url)}
+};
+$('#exportBtn').onclick=()=>{
+ const c={U:k=>ASSETS[k],edit:false};
+ const body=pageHTML(c).replace(/ data-edit="[^"]*"/g,'');
+ const html=`<!doctype html>\n<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Présentoir de comptoir sur mesure | Kontfeel</title><style>${BASE_CSS}${EXTRA_CSS}${globalCSS(state.g)}</style></head><body><div id="kf-root">${body}</div><script>window.KF_DATA=${safeJSON(dataFor(c.U))};(${KFRuntime.toString()})();KF.init();<\/script></body></html>`;
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='kontfeel-page-personnalisee.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);
+ toast('Page téléchargée : un fichier HTML autonome, sans le constructeur.');
+};
+
+/* ---------- Démarrage ---------- */
+const loaded=load();if(loaded)state=norm(loaded);
+bootFrame();commit();
+</script>
+</body></html>
