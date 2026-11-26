@@ -10,6 +10,8 @@ import json
 import re
 from pathlib import Path
 
+from donnees_communes import BOIS, completer
+
 ROOT = Path(__file__).resolve().parent.parent
 base = (ROOT / "p1.html").read_text(encoding="utf-8")
 src = (ROOT / "outils" / "p3-source.html").read_text(encoding="utf-8")
@@ -23,6 +25,7 @@ css = one(r"<style>(.*?)</style>")
 products = json.loads(one(r"const products=(\[.*?\]),categories"))
 cat_images = json.loads(one(r"catImages=(\[.*?\])"))
 hero = json.loads(one(r"heroThumbItems=(\[.*?\]);"))
+products = completer(products, {h["alt"]: h["src"] for h in hero})
 
 # Descriptions courtes (une phrase) intégrant le vocabulaire recherché par les prospects.
 SHORT = {
@@ -89,6 +92,7 @@ rep = {
     "__GALLERY__": "".join(card(p, i) for i, p in enumerate(products)),
     "__MAT_CARTON__": carton["img"], "__MAT_CARTON_ALT__": esc(carton["alt"]),
     "__MAT_PLAST__": plast["img"], "__MAT_PLAST_ALT__": esc(plast["alt"]),
+    "__MAT_BOIS__": BOIS["src"], "__MAT_BOIS_ALT__": BOIS["alt"], "__MAT_BOIS_URL__": BOIS["url"], "__MAT_BOIS_ARIA__": BOIS["aria"],
     "__MAT_METAL__": metal_src, "__MAT_METAL_ALT__": "Présentoir inox à deux niveaux pour professionnels",
     "/*__PRODUCTS__*/[]": dump([{k: v for k, v in p.items() if k != "img"} for p in products]),
     "/*__HEROTHUMBS__*/[]": dump(hero),

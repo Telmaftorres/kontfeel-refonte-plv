@@ -10,6 +10,8 @@ import json
 import re
 from pathlib import Path
 
+from donnees_communes import BOIS, completer
+
 ROOT = Path(__file__).resolve().parent.parent
 base = (ROOT / "p1.html").read_text(encoding="utf-8")
 src = (ROOT / "outils" / "p4-source.html").read_text(encoding="utf-8")
@@ -22,6 +24,7 @@ css = one(r"<style>(.*?)</style>")
 products = json.loads(one(r"const products=(\[.*?\]),categories"))
 cat_images = json.loads(one(r"catImages=(\[.*?\])"))
 hero = {h["alt"]: h["src"] for h in json.loads(one(r"heroThumbItems=(\[.*?\]);"))}
+products = completer(products, hero)
 by_name = {p["name"]: p for p in products}
 HINT = '<span class="hint" aria-hidden="true">Voir les réalisations ↓</span>'
 
@@ -69,8 +72,9 @@ MATS = [
     ("Carton", pick("mat", "Carton", carton["img"], carton["alt"]),
      "Léger et personnalisable, le présentoir de comptoir en carton est idéal pour les opérations promotionnelles.",
      ("https://www.kontfeel.fr/display-plv/presentoir-de-comptoir-carton", "Découvrir nos présentoirs de comptoir en carton", "Présentoirs en carton →")),
-    ("Bois", '<div class="matimg wood" aria-hidden="true"></div>',
-     "Un présentoir de comptoir en bois apporte un rendu chaleureux, pour une présentation durable.", None),
+    ("Bois", f'<div class="matimg"><img alt="{BOIS["alt"]}" loading="lazy" src="{BOIS["src"]}"/></div>',
+     "Un présentoir de comptoir en bois apporte un rendu chaleureux, pour une présentation durable.",
+     (BOIS["url"], BOIS["aria"], "Voir une réalisation en bois →")),
     ("Métal", pick("mat", "Métal", metal_src, "Présentoir inox à deux niveaux pour professionnels"),
      "Robuste et adapté aux installations de longue durée.",
      ("https://www.kontfeel.fr/realisations-plv/presentoir-inox-pour-les-professionnels", "Voir la réalisation : présentoir inox pour professionnels", "Voir une réalisation en métal →")),
@@ -79,7 +83,7 @@ MATS = [
      ("https://www.kontfeel.fr/realisations-plv/rappel-de-marque-plastique", "Voir la réalisation : rappel de marque en plexiglas pour opticien", "Voir une réalisation en plastique →")),
 ]
 mat_values = {p["mat"] for p in products if known(p["mat"])}
-assert mat_values == {"Carton", "Métal", "Plastique"}, mat_values  # pas de réalisation en bois dans les données
+assert mat_values == {"Carton", "Métal", "Plastique"}, mat_values  # la réalisation bois est un présentoir de sol : pas dans la galerie comptoir
 mat_html = []
 for name, visual, text, link in MATS:
     a = f'<a class="familylink" href="{link[0]}" rel="noopener" target="_blank" aria-label="{link[1]}">{link[2]}</a>' if link else ""
@@ -96,7 +100,7 @@ SECTORS = [
     ("Édition &amp; librairie", "Édition", "Mettez en avant vos nouveautés, livres et produits culturels.",
      "https://www.kontfeel.fr/solutions-metiers/edition-culture-loisirs", "Découvrir la PLV édition et culture",
      by_name["Présentoir escalier en carton Psycho-Pop"]["img"], by_name["Présentoir escalier en carton Psycho-Pop"]["alt"]),
-    ("Alimentaire", None, "Facilitez la présentation de vos produits alimentaires, nouveautés et offres promotionnelles.",
+    ("Alimentaire", "Alimentaire", "Facilitez la présentation de vos produits alimentaires, nouveautés et offres promotionnelles.",
      "https://www.kontfeel.fr/plv-magasin", "Découvrir la PLV magasin",
      hero["Présentoir de comptoir pour produits alimentaires asiatiques"], "Présentoir de comptoir pour produits alimentaires asiatiques"),
     ("Retail &amp; distribution", "Retail", "Déployez des présentoirs adaptés à vos points de vente et à vos opérations commerciales.",
