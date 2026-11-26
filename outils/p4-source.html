@@ -91,7 +91,11 @@ __BASECSS__
 .pill:hover{border-color:var(--pink)}
 .pill[aria-pressed=true]{border-color:var(--pink);background:var(--pale);color:var(--pink);font-weight:650}
 /* Sélection et galerie */
-.selbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px 16px;margin-top:18px;padding:12px 16px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+.p4filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px 14px;align-items:end;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:12px;margin-bottom:16px}
+.p4filters label{font-size:12px;font-weight:650}
+.p4filters select{display:block;width:100%;height:40px;margin-top:4px;border:1px solid #dadbe4;background:#fff;border-radius:8px;padding:0 10px;color:var(--ink)}
+.p4filters select.set{border-color:var(--pink);background:var(--pale);color:var(--pink);font-weight:650}
+.fres{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;min-height:40px;font-size:13px;color:var(--muted);white-space:nowrap}.fres strong{color:var(--ink)}
 .selinfo{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;font-size:13.5px;color:var(--muted)}
 .selinfo strong{color:var(--ink)}
 .chipx{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--pink);background:#fff;color:var(--pink);border-radius:20px;padding:3px 6px 3px 11px;font-size:12.5px;font-weight:650}
@@ -117,7 +121,7 @@ __BASECSS__
 .ctaphone{color:#fff;font-weight:650;font-size:14px}.ctaphone:hover{text-decoration:underline}
 .ctarating{font-size:13px;white-space:nowrap}.ctarating .stars{color:#ffd65a;letter-spacing:1px;margin-right:4px}
 @media(max-width:1100px){.custom{grid-template-columns:1fr}.custom h2{max-width:none}.sects{grid-template-columns:repeat(2,minmax(0,1fr))}.p4gal{gap:12px}}
-@media(max-width:900px){.modes{grid-template-columns:1fr;gap:10px}.mode{padding:12px 14px}.fams{grid-template-columns:repeat(3,minmax(0,1fr))}.mats{grid-template-columns:repeat(2,minmax(0,1fr))}.customs{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px}}
+@media(max-width:900px){.p4filters{grid-template-columns:repeat(3,minmax(0,1fr))}.fres{grid-column:1/-1;min-height:0}.modes{grid-template-columns:1fr;gap:10px}.mode{padding:12px 14px}.fams{grid-template-columns:repeat(3,minmax(0,1fr))}.mats{grid-template-columns:repeat(2,minmax(0,1fr))}.customs{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px}}
 @media(max-width:800px){.p4hero{grid-template-columns:1fr;gap:18px}}
 @media(max-width:650px){.section{padding:26px 0}.p4hero{padding:20px}.reassure{gap:4px 14px;font-size:12.5px}
 .mvis img,.mvis i{width:38px;height:38px}.mtxt strong{font-size:15px}
@@ -125,7 +129,7 @@ __BASECSS__
 .fams{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.fam .pick{height:92px}.hint{display:none}.fam h4{font-size:13px;margin:8px 10px 0}.nw{white-space:normal}.fam p{font-size:12px;margin:4px 10px 8px}.fam .familylink{margin:auto 10px 10px;font-size:12px}
 .mats{gap:10px}.mat .pick,.matimg{height:100px}.mat h4{font-size:15px;margin:10px 10px 2px}.mat p{font-size:12.5px;margin:0 10px 10px}.mat .familylink{margin:auto 10px 10px;font-size:12px}
 .sects{grid-template-columns:1fr}.sect .pick,.sect .simg{width:32%}
-.selbar{padding:10px 12px}
+.p4filters{grid-template-columns:1fr 1fr;padding:10px;gap:8px}.p4filters label:first-child{grid-column:1/-1}.fres{grid-column:1/-1;min-height:0}
 .p4gal{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.p4gal .product .info{padding:9px 10px}.p4gal .product strong{font-size:13.5px}
 .custom{padding:14px}.customs{grid-template-columns:repeat(2,minmax(0,1fr))}.customs li{flex-direction:row;text-align:left;font-size:12.5px}.customs svg{width:30px;height:30px;padding:6px}
 .p4cta{padding:24px 20px}.ctaside{align-items:flex-start;text-align:left;margin-top:16px}.ctarating{white-space:normal}}
@@ -206,14 +210,17 @@ __SECTORS__
 <div class="others" role="group" aria-label="Autres secteurs"><span>Autres secteurs représentés dans nos réalisations :</span>__OTHER_SECTORS__</div>
 </div></div></div>
 
-<div class="selbar hide" id="selbar">
-<div class="selinfo"><span id="status" aria-live="polite"></span><span id="chips"></span><button class="linkbtn" id="clearAll" type="button">Tout effacer</button></div>
-</div>
 </section>
 
 <!-- Galerie unique -->
 <section class="section" id="realisations" style="padding-top:0">
 <h2>Nos réalisations de présentoirs de comptoir</h2>
+<div class="p4filters" role="group" aria-label="Filtrer les réalisations">
+<label>Type de présentoir<select id="fTyp" data-k="typ"></select></label>
+<label>Matériau<select id="fMat" data-k="mat"></select></label>
+<label>Secteur d’activité<select id="fSect" data-k="sect"></select></label>
+<div class="fres"><span id="status" aria-live="polite"></span><span id="chips"></span><button class="linkbtn hide" id="clearAll" type="button">Tout effacer</button></div>
+</div>
 <div class="gallery p4gal" id="gallery">
 __GALLERY__
 <div class="empty hide" id="empty">Aucune réalisation ne correspond à cette sélection. <button class="linkbtn" type="button" id="emptyReset">Tout effacer</button> ou <button class="linkbtn quote" type="button">parlez-nous de votre projet</button>.</div>
@@ -323,13 +330,19 @@ function render(){
     const ok=Object.keys(sel).every(k=>!sel[k]||p[k]===sel[k])&&(!q||norm([p.name,p.typ,p.mat,p.sect].join(' ')).includes(q));
     if(ok)n++;c.classList.toggle('hide',!(ok&&(showAll||n<=STEP)))});
   const active=Object.keys(sel).filter(k=>sel[k]);
-  $('status').innerHTML=`<strong>${n}</strong> réalisation${n>1?'s':''}`+(active.length||query?' pour :':'');
-  $('chips').innerHTML=active.map(k=>`<button type="button" class="chipx" data-rm="${k}" aria-label="Retirer le critère ${esc(LABEL[k])} : ${esc(sel[k])}">${esc(sel[k])}<span aria-hidden="true">×</span></button>`).join(' ')+(query?` <button type="button" class="chipx" data-rm="q" aria-label="Retirer la recherche ${esc(query)}">« ${esc(query)} »<span aria-hidden="true">×</span></button>`:'');
-  $('selbar').classList.toggle('hide',!(active.length||query));
+  $('status').innerHTML=`<strong>${n}</strong> réalisation${n>1?'s':''}`;
+  selects.forEach(x=>{x.value=sel[x.dataset.k];x.classList.toggle('set',!!sel[x.dataset.k])});
+  $('chips').innerHTML=query?`<button type="button" class="chipx" data-rm="q" aria-label="Retirer la recherche ${esc(query)}">« ${esc(query)} »<span aria-hidden="true">×</span></button>`:'';
+  $('clearAll').classList.toggle('hide',!(active.length||query));
   $('empty').classList.toggle('hide',n>0);
   $('more').classList.toggle('hide',showAll||n<=STEP);$('more').textContent=`Voir toutes les réalisations (${n})`;
   filterBtns.forEach(b=>b.setAttribute('aria-pressed',String(sel[b.dataset.f]===b.dataset.v)));
 }
+const selects=[$('fTyp'),$('fMat'),$('fSect')];
+opts($('fTyp'),[...new Set([...document.querySelectorAll('[data-f=typ]')].map(b=>b.dataset.v))],'Tous les types');
+opts($('fMat'),[...new Set(products.map(p=>p.mat).filter(known))].sort((a,b)=>a.localeCompare(b,'fr')),'Tous les matériaux');
+opts($('fSect'),[...new Set(products.map(p=>p.sect).filter(known))].sort((a,b)=>a.localeCompare(b,'fr')),'Tous les secteurs');
+selects.forEach(x=>x.onchange=()=>{sel[x.dataset.k]=x.value;showAll=false;render()});
 function clearAll(){Object.keys(sel).forEach(k=>sel[k]='');query='';$('topsearch').querySelector('input').value='';showAll=false;render()}
 filterBtns.forEach(b=>b.onclick=()=>{const k=b.dataset.f;sel[k]=sel[k]===b.dataset.v?'':b.dataset.v;showAll=false;render()});
 $('chips').addEventListener('click',e=>{const b=e.target.closest('[data-rm]');if(!b)return;b.dataset.rm==='q'?(query='',$('topsearch').querySelector('input').value=''):sel[b.dataset.rm]='';render();$('status').focus?.()});
