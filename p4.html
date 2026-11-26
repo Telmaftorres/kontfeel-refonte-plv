@@ -112,7 +112,8 @@
 .pill:hover{border-color:var(--pink)}
 .pill[aria-pressed=true]{border-color:var(--pink);background:var(--pale);color:var(--pink);font-weight:650}
 /* Sélection et galerie */
-.p4filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px 14px;align-items:end;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:12px;margin-bottom:16px}
+.p4filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px 14px;align-items:end;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;position:sticky;top:8px;z-index:20;transition:box-shadow .2s}
+.p4filters.stuck{box-shadow:0 6px 18px #19192d1f}
 .p4filters label{font-size:12px;font-weight:650}
 .p4filters select{display:block;width:100%;height:40px;margin-top:4px;border:1px solid #dadbe4;background:#fff;border-radius:8px;padding:0 10px;color:var(--ink)}
 .p4filters select.set{border-color:var(--pink);background:var(--pale);color:var(--pink);font-weight:650}
@@ -150,7 +151,7 @@
 .fams{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.fam .pick{height:92px}.hint{display:none}.fam h4{font-size:13px;margin:8px 10px 0}.nw{white-space:normal}.fam p{font-size:12px;margin:4px 10px 8px}.fam .familylink{margin:auto 10px 10px;font-size:12px}
 .mats{gap:10px}.mat .pick,.matimg{height:100px}.mat h4{font-size:15px;margin:10px 10px 2px}.mat p{font-size:12.5px;margin:0 10px 10px}.mat .familylink{margin:auto 10px 10px;font-size:12px}
 .sects{grid-template-columns:1fr}.sect .pick,.sect .simg{width:32%}
-.p4filters{grid-template-columns:1fr 1fr;padding:10px;gap:8px}.p4filters label:first-child{grid-column:1/-1}.fres{grid-column:1/-1;min-height:0}
+.p4filters{grid-template-columns:repeat(3,minmax(0,1fr));padding:8px;gap:6px;top:0;border-radius:0 0 12px 12px}.p4filters label{font-size:0}.p4filters select{height:36px;margin-top:0;font-size:12.5px;padding:0 6px}.fres{grid-column:1/-1;min-height:0}
 .p4gal{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.p4gal .product .info{padding:9px 10px}.p4gal .product strong{font-size:13.5px}
 .custom{padding:14px}.customs{grid-template-columns:repeat(2,minmax(0,1fr))}.customs li{flex-direction:row;text-align:left;font-size:12.5px}.customs svg{width:30px;height:30px;padding:6px}
 .p4cta{padding:24px 20px}.ctaside{align-items:flex-start;text-align:left;margin-top:16px}.ctarating{white-space:normal}}
@@ -376,11 +377,12 @@ function render(){
   $('more').classList.toggle('hide',showAll||n<=STEP);$('more').textContent=`Voir toutes les réalisations (${n})`;
   filterBtns.forEach(b=>b.setAttribute('aria-pressed',String(sel[b.dataset.f]===b.dataset.v)));
 }
-const selects=[$('fTyp'),$('fMat'),$('fSect')];
-opts($('fTyp'),[...new Set([...document.querySelectorAll('[data-f=typ]')].map(b=>b.dataset.v))],'Tous les types');
-opts($('fMat'),[...new Set(products.map(p=>p.mat).filter(known))].sort((a,b)=>a.localeCompare(b,'fr')),'Tous les matériaux');
-opts($('fSect'),[...new Set(products.map(p=>p.sect).filter(known))].sort((a,b)=>a.localeCompare(b,'fr')),'Tous les secteurs');
-selects.forEach(x=>x.onchange=()=>{sel[x.dataset.k]=x.value;showAll=false;render()});
+const selects=[$('fTyp'),$('fMat'),$('fSect')],bar=document.querySelector('.p4filters');
+const small=matchMedia('(max-width:650px)').matches;
+opts($('fTyp'),[...new Set([...document.querySelectorAll('[data-f=typ]')].map(b=>b.dataset.v))],small?'Type':'Tous les types');
+opts($('fMat'),[...new Set(products.map(p=>p.mat).filter(known))].sort((a,b)=>a.localeCompare(b,'fr')),small?'Matériau':'Tous les matériaux');
+opts($('fSect'),[...new Set(products.map(p=>p.sect).filter(known))].sort((a,b)=>a.localeCompare(b,'fr')),small?'Secteur':'Tous les secteurs');
+selects.forEach(x=>x.onchange=()=>{sel[x.dataset.k]=x.value;showAll=false;render();if(bar.classList.contains('stuck'))$('realisations').scrollIntoView({behavior:'smooth'})});
 function clearAll(){Object.keys(sel).forEach(k=>sel[k]='');query='';$('topsearch').querySelector('input').value='';showAll=false;render()}
 filterBtns.forEach(b=>b.onclick=()=>{const k=b.dataset.f;sel[k]=sel[k]===b.dataset.v?'':b.dataset.v;showAll=false;render()});
 $('chips').addEventListener('click',e=>{const b=e.target.closest('[data-rm]');if(!b)return;b.dataset.rm==='q'?(query='',$('topsearch').querySelector('input').value=''):sel[b.dataset.rm]='';render();$('status').focus?.()});
@@ -401,6 +403,8 @@ document.querySelectorAll('.quote').forEach(b=>b.onclick=()=>openQuote());
 $('modalQuote').onclick=()=>openQuote(selected);
 document.querySelectorAll('dialog').forEach(d=>{d.querySelector('.close').onclick=()=>d.close();d.addEventListener('click',e=>{if(e.target===d)d.close()})});
 $('quoteForm').onsubmit=e=>{e.preventDefault();$('confirmation').classList.remove('hide')};
+/* Ombre de la barre lorsqu'elle est collée en haut de l'écran */
+addEventListener('scroll',()=>{const t=parseFloat(getComputedStyle(bar).top)||0;bar.classList.toggle('stuck',bar.getBoundingClientRect().top<=t+0.5&&scrollY>0)},{passive:true});
 render();
 </script>
 </body>

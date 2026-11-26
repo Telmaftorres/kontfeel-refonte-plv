@@ -27,22 +27,8 @@ cat_images = json.loads(one(r"catImages=(\[.*?\])"))
 hero = json.loads(one(r"heroThumbItems=(\[.*?\]);"))
 products = completer(products, {h["alt"]: h["src"] for h in hero})
 
-# Descriptions courtes (une phrase) intégrant le vocabulaire recherché par les prospects.
-SHORT = {
-    "Totems de comptoir": "Un totem personnalisé pour attirer le regard dans un espace réduit.",
-    "Porte-documents": "Présentez vos flyers, brochures et catalogues en libre-service.",
-    "Chevalets et cavaliers": "Des chevalets de comptoir pour communiquer sur vos offres.",
-    "Distributeurs et vrac": "Des distributeurs en libre-service, notamment pour la pharmacie.",
-    "Sabots et stop-piles": "Valorisez vos produits dans un support compact.",
-    "Prêts à vendre": "Simplifiez la mise en rayon de vos produits.",
-    "Présentoirs escaliers": "Des présentoirs à plusieurs niveaux pour valoriser vos références.",
-    "Présentoirs à empreintes": "Des découpes adaptées à vos produits cosmétiques ou pharmaceutiques.",
-    "Rappels de marque": "Renforcez la visibilité de votre marque en point de vente.",
-    "Glorifiers": "Des présentoirs personnalisés pour sublimer vos produits phares.",
-}
-
-# Familles : nom, lien et aria-label repris de P1 (version complète).
-# La photo filtre les réalisations ; le titre et le lien rose mènent à la page de la gamme.
+# Familles : nom et photo repris de P1 (version complète), en vignettes comme dans P2.
+# La carte entière filtre les réalisations.
 fams = re.findall(
     r'<article class="catwrap"><button class="cat" data-cat="([^"]+)">.*?</button><p>[^<]*</p>'
     r'<a class="familylink" href="([^"]+)" rel="noopener" target="_blank" aria-label="([^"]+)">',
@@ -52,11 +38,9 @@ fam_html = []
 for (name, url, aria), img in zip(fams, cat_images):
     label = esc(name).replace("Porte-documents", '<em class="nw">Porte-documents</em>').replace("stop-piles", '<em class="nw">stop-piles</em>')
     fam_html.append(
-        f'<article class="fam"><button class="pick" type="button" data-cat="{esc(name)}" aria-label="Afficher les réalisations : {esc(name)}">'
-        f'<img alt="Exemple de {esc(name[0].lower() + name[1:])}" loading="lazy" src="{img}"/><span class="hint" aria-hidden="true">Voir les réalisations ↓</span></button>'
-        f'<h3 class="nm"><a href="{url}" rel="noopener" target="_blank">{label}</a></h3>'
-        f'<p>{esc(SHORT[name])}</p>'
-        f'<a class="familylink" href="{url}" rel="noopener" target="_blank" aria-label="{aria}">Découvrir la gamme →</a></article>')
+        f'<article class="fam"><button class="pick" type="button" data-cat="{esc(name)}">'
+        f'<span class="ph"><img alt="Exemple de {esc(name[0].lower() + name[1:])}" loading="lazy" src="{img}"/></span>'
+        f'<span class="nm">{label}</span></button></article>')
 
 
 def known(v):
