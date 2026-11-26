@@ -1,6 +1,6 @@
 """Génère p4.html (découverte interactive) à partir de outils/p4-source.html.
 
-Images, CSS de base, familles et réalisations repris de p1.html (version complète).
+Images, CSS de base, familles et réalisations repris de outils/archive/p1-version-complete.html (ancien P1).
 Tous les contenus des panneaux sont écrits dans le HTML : l'interaction ne change que leur visibilité.
 Usage : python3 outils/build_p4.py
 """
@@ -13,7 +13,7 @@ from pathlib import Path
 from donnees_communes import BOIS, completer
 
 ROOT = Path(__file__).resolve().parent.parent
-base = (ROOT / "p1.html").read_text(encoding="utf-8")
+base = (ROOT / "outils" / "archive" / "p1-version-complete.html").read_text(encoding="utf-8")  # ancien P1, source des données
 src = (ROOT / "outils" / "p4-source.html").read_text(encoding="utf-8")
 esc = lambda s: html.escape(str(s), quote=True)
 one = lambda pat: re.search(pat, base, re.S).group(1)

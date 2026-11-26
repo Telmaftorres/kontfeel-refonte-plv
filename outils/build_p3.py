@@ -1,6 +1,6 @@
 """Génère p3.html (version commerciale simplifiée) à partir de outils/p3-source.html.
 
-Les images (logo, bannière, familles, réalisations) et le CSS de base sont repris de p1.html (version complète).
+Les images (logo, bannière, familles, réalisations) et le CSS de base sont repris de outils/archive/p1-version-complete.html (ancien P1).
 La photo du métal (présentoir inox, réalisation publiée sur kontfeel.fr) est dans outils/p3-metal-inox.jpg.
 Usage : python3 outils/build_p3.py
 """
@@ -13,7 +13,7 @@ from pathlib import Path
 from donnees_communes import BOIS, completer
 
 ROOT = Path(__file__).resolve().parent.parent
-base = (ROOT / "p1.html").read_text(encoding="utf-8")
+base = (ROOT / "outils" / "archive" / "p1-version-complete.html").read_text(encoding="utf-8")  # ancien P1, source des données
 src = (ROOT / "outils" / "p3-source.html").read_text(encoding="utf-8")
 
 esc = lambda s: html.escape(str(s), quote=True)

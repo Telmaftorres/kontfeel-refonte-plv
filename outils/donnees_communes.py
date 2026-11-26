@@ -1,6 +1,6 @@
 """Données partagées par build_p3.py et build_p4.py (réalisations complémentaires, photo bois).
 
-Les réalisations de base sont lues dans p1.html ; ce module les complète avec des réalisations Kontfeel
+Les réalisations de base sont lues dans outils/archive/p1-version-complete.html (ancien P1) ; ce module les complète avec des réalisations Kontfeel
 vérifiées sur kontfeel.fr, et fixe l'ordre des premières cartes de la galerie.
 """
 import base64
