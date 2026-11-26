@@ -59,11 +59,11 @@ __BASECSS__
 .mat p{font-size:13.5px;color:var(--muted);margin:0 14px 12px;line-height:1.5}
 .mat .familylink{margin:auto 14px 12px;font-size:12.5px;font-weight:600}
 /* Personnalisation */
-.custom{margin-top:22px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px 28px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px}
-.custom h2{font-size:19px;letter-spacing:-.3px;margin:0;max-width:190px;line-height:1.25}
-.customs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
-.customs li{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;font-size:13px;font-weight:600;line-height:1.3}
-.customs svg{width:34px;height:34px;padding:7px;border-radius:50%;background:var(--pale);color:var(--pink);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.custom{margin-top:22px;padding-top:18px;border-top:1px solid #e2e2ea}
+.custom-title{text-align:center;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+.customs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.customs li{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:600;line-height:1.3}
+.customs svg{width:32px;height:32px;padding:7px;border-radius:50%;background:#fff;color:var(--pink);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none;box-shadow:0 0 0 1px var(--line)}
 .matnote{text-align:center;margin:18px 0 0;color:#48495c;font-size:14.5px}
 .linkbtn{border:0;background:none;padding:0;color:var(--pink);font-weight:650}
 .linkbtn:hover{text-decoration:underline}
@@ -80,7 +80,7 @@ __BASECSS__
 .ctaphone:hover{text-decoration:underline}
 .ctarating{font-size:13px;white-space:nowrap}
 .ctarating .stars{color:#ffd65a;letter-spacing:1px;margin-right:4px}
-@media(max-width:1100px){.p3gal{gap:12px}.custom{grid-template-columns:1fr}.custom h2{max-width:none}}
+@media(max-width:1100px){.p3gal{gap:12px}.customs li{flex-direction:column;text-align:center;gap:6px}}
 @media(max-width:800px){.p3hero{grid-template-columns:1fr;gap:20px}}
 @media(max-width:900px){.fams{grid-template-columns:repeat(3,minmax(0,1fr))}.mats{grid-template-columns:repeat(2,minmax(0,1fr))}.customs{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px}.p3filters{grid-template-columns:repeat(3,minmax(0,1fr))}.fres{grid-column:1/-1;height:auto}}
 @media(max-width:650px){.section{padding:26px 0}.p3hero{padding:20px}.p3hero .thumbs{grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}.reassure{gap:4px 14px;font-size:12.5px}
@@ -88,7 +88,7 @@ __BASECSS__
 .p3filters{grid-template-columns:1fr 1fr;padding:10px;gap:8px}.p3filters label:first-child{grid-column:1/-1}
 .p3gal{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.p3gal .product .info{padding:9px 10px}.p3gal .product strong{font-size:13.5px}
 .mats{gap:10px}.matimg{height:110px}.mat h3{font-size:15px;margin:10px 10px 2px}.mat p{font-size:12.5px;margin:0 10px 10px}.mat .familylink{margin:auto 10px 10px;font-size:12px}
-.custom{padding:14px}.customs{grid-template-columns:repeat(2,minmax(0,1fr))}.customs li{flex-direction:row;text-align:left;font-size:12.5px}.customs svg{width:30px;height:30px;padding:6px}
+.customs{grid-template-columns:repeat(2,minmax(0,1fr))}.customs li{flex-direction:row;justify-content:flex-start;text-align:left;font-size:12.5px}.customs svg{width:30px;height:30px;padding:6px}
 .p3cta{padding:24px 20px}.ctaside{align-items:flex-start;text-align:left;margin-top:16px}.ctarating{white-space:normal}}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.kontfeel.fr/"}, {"@type": "ListItem", "position": 2, "name": "Présentoir comptoir", "item": "https://www.kontfeel.fr/display-plv/presentoir-comptoir"}]}</script>
@@ -170,9 +170,10 @@ __GALLERY__
 </div>
 
 <!-- 4. Matériaux et personnalisation -->
-<section class="section band">
+<section class="section band" id="sur-mesure">
 <div class="wrap">
-<h2>Des présentoirs adaptés à vos besoins</h2>
+<h2>Des présentoirs de comptoir conçus sur mesure</h2>
+<p class="sub">Choisissez vos matériaux, vos dimensions et vos finitions pour créer une PLV à l’image de votre marque.</p>
 <div class="mats">
 <article class="mat">
 <div class="matimg"><img alt="__MAT_CARTON_ALT__" loading="lazy" src="__MAT_CARTON__"/></div>
@@ -198,18 +199,18 @@ __GALLERY__
 <a class="familylink" href="https://www.kontfeel.fr/realisations-plv/rappel-de-marque-plastique" rel="noopener" target="_blank" aria-label="Voir la réalisation : rappel de marque en plexiglas pour opticien">Voir une réalisation en plastique →</a>
 </article>
 </div>
-<div class="custom" role="group" aria-labelledby="customTitle">
-<h2 id="customTitle">Une PLV adaptée à vos produits</h2>
+<div class="custom">
+<h3 class="custom-title">Personnalisez chaque détail</h3>
 <ul class="customs">
 <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17 17 3l4 4L7 21z"/><path d="m7 13 2 2m1-5 2 2m1-5 2 2"/></svg>Dimensions et formats</li>
 <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.2 8.2 20 20M8.2 15.8 20 4"/></svg>Formes et découpes</li>
 <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M4 21v-5h5v-5h5V6h6v15"/></svg>Nombre de niveaux</li>
 <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18"/></svg>Empreintes et compartiments</li>
 <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1 0 1.5-.7 1.5-1.5 0-1.2-1-1.5-1-2.5s.8-2 2-2H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></svg>Personnalisation graphique</li>
-<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5z"/><path d="m2 13 10 5 10-5"/></svg>Matériaux et finitions</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5z"/><path d="m2 13 10 5 10-5"/></svg>Finitions</li>
 </ul>
 </div>
-<p class="matnote">Nous vous accompagnons dans le choix du matériau selon vos produits, vos contraintes et votre budget. <button class="linkbtn quote" type="button">Nous contacter →</button></p>
+<p class="matnote">Nous vous accompagnons dans le choix du matériau selon vos produits, vos contraintes et votre budget. <button class="linkbtn quote" type="button">Parlons de votre projet →</button></p>
 </div>
 </section>
 
