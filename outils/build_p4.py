@@ -1,6 +1,6 @@
 """Construit p4.html (constructeur de page) à partir de outils/p4-source.html.
 
-Les images, les styles de base et les données produits sont repris de p1.html,
+Les images, les styles de base et les données produits sont repris de outils/archive/p1-filtres-deroulants.html (ancien P1),
 pour que le prototype 4 reste identique visuellement aux trois autres.
 Utilisation : python3 outils/build_p4.py
 """
@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-p1 = (ROOT / "p1.html").read_text(encoding="utf-8")
+p1 = (ROOT / "outils" / "archive" / "p1-filtres-deroulants.html").read_text(encoding="utf-8")
 src = (ROOT / "outils" / "p4-source.html").read_text(encoding="utf-8")
 
 h = lambda u: hashlib.md5(u.encode()).hexdigest()
