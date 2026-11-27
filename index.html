@@ -1,1 +1,94 @@
-<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kontfeel | Propositions</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:70px auto;padding:20px;color:#19192d}h1{font-size:42px}a{display:block;padding:22px;border:1px solid #ddd;border-radius:12px;margin:15px 0;color:#d3336c;text-decoration:none}a small{display:block;margin-top:6px}small{color:#555}</style><h1>Refonte présentoir de comptoir</h1><p>Trois variantes pour validation interne.</p><a href="p2.html">P2 — Filtres visibles à gauche, catégories en vignettes</a><a href="p3.html">P3 — Version commerciale simplifiée<small>Une version plus courte, centrée sur les produits, les réalisations, les matériaux et la prise de contact.</small></a><a href="p4.html">P4 — Découverte interactive<small>Une page très courte au départ : on déplie les familles, les matériaux ou les secteurs, et la galerie se filtre selon la sélection.</small></a><small>Prototypes non indexables • Données de démonstration</small></html>
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Refonte du site internet Kontfeel | Maquettes</title>
+<style>
+:root{--ink:#19192d;--muted:#6f7085;--pink:#d3336c;--pale:#fbeef3;--bg:#f6f6f9;--line:#e9e9ef}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.6 'Avenir Next',Arial,sans-serif;color:var(--ink);background:#fff}
+a{color:inherit;text-decoration:none}
+a:focus-visible{outline:3px solid #18b7d8;outline-offset:3px}
+.wrap{max-width:1250px;width:92%;margin:auto}
+header{border-top:5px solid var(--ink);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 0}
+.logo{width:220px;max-width:55%;height:auto;display:block}
+.top small{color:var(--muted);font-size:13px;text-align:right}
+.intro{background:linear-gradient(105deg,#f6f6fa,#fff);border-radius:18px;padding:44px 40px;margin:28px 0 8px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--pink);text-transform:uppercase}
+h1{font-size:clamp(30px,4vw,48px);letter-spacing:-1.6px;line-height:1.08;margin:10px 0 12px}
+.intro p{font-size:17px;color:#48495c;margin:0;max-width:640px}
+.jump{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.jump a{border:1px solid #c9c9d5;background:#fff;border-radius:8px;padding:9px 16px;font-weight:600;font-size:14px}
+.jump a:hover{border-color:var(--pink);color:var(--pink)}
+.famille{padding:44px 0 12px;scroll-margin-top:16px}
+.famille-tete{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:24px}
+h2{font-size:28px;line-height:1.2;letter-spacing:-.7px;margin:0 0 4px}
+.famille-tete p{color:var(--muted);margin:0}
+.compte{color:var(--muted);font-size:14px;white-space:nowrap}
+.grille{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.carte{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;transition:border-color .15s,box-shadow .15s}
+.carte:hover{border-color:#eac2d1;box-shadow:0 8px 24px rgba(25,25,45,.07)}
+.carte.recente{border-color:#eac2d1}
+.apercu{display:block;position:relative;aspect-ratio:16/10;background:var(--bg);border-bottom:1px solid var(--line);overflow:hidden}
+.apercu img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.corps{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
+.badge{align-self:flex-start;background:var(--pale);color:var(--pink);font-size:11px;font-weight:750;letter-spacing:.5px;text-transform:uppercase;border-radius:20px;padding:4px 11px;margin-bottom:10px}
+h3{font-size:18px;line-height:1.3;margin:0 0 6px}
+.corps p{color:var(--muted);margin:0 0 14px;font-size:14px}
+.date{font-size:12px;color:var(--muted);margin-top:auto;margin-bottom:14px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--pink);color:#fff;border:1px solid var(--pink);border-radius:8px;font-weight:650;padding:11px 18px;font-size:14px}
+.btn:hover{filter:brightness(.94)}
+.lien{font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.lien:hover{color:var(--pink)}
+footer{margin-top:56px;border-top:1px solid var(--line);padding:24px 0 36px;color:var(--muted);font-size:13px}
+@media(max-width:1000px){.grille{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.grille{grid-template-columns:1fr}.intro{padding:28px 22px}.top small{display:none}h2{font-size:24px}.famille{padding-top:34px}}
+@media(prefers-reduced-motion:reduce){.carte{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><img class="logo" src="assets/marque/logo-kontfeel.jpg" alt="Kontfeel – Marketing point de vente" width="328" height="65"><small>Espace de présentation interne</small></div></header>
+<main class="wrap">
+  <section class="intro">
+    <span class="eyebrow">Maquettes de travail</span>
+    <h1>Refonte du site internet Kontfeel</h1>
+    <p>Propositions de maquettes et évolutions des pages commerciales.</p>
+    <nav class="jump" id="sommaire" aria-label="Familles de produits"></nav>
+  </section>
+  <div id="familles"></div>
+  <noscript><p>Activez JavaScript pour afficher la liste, ou ouvrez directement : <a href="p2.html">P2</a>, <a href="p3.html">P3</a>, <a href="p4.html">P4</a>, <a href="seeding-box.html">Seeding box</a>.</p></noscript>
+</main>
+<footer><div class="wrap">Maquettes internes non publiées · Espace non indexé par les moteurs de recherche</div></footer>
+<script src="maquettes.js"></script>
+<script>
+(function(){
+  var mois=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  function date(iso){var p=iso.split('-');return (+p[2])+' '+mois[+p[1]-1]+' '+p[0];}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  var html='',nav='';
+  KONTFEEL_FAMILLES.forEach(function(f){
+    var n=f.maquettes.length;
+    nav+='<a href="#'+esc(f.id)+'">'+esc(f.titre)+'</a>';
+    html+='<section class="famille" id="'+esc(f.id)+'"><div class="famille-tete"><div><h2>'+esc(f.titre)+'</h2><p>'+esc(f.intro)+'</p></div><span class="compte">'+n+' version'+(n>1?'s':'')+'</span></div><div class="grille">';
+    f.maquettes.forEach(function(m){
+      var voir='voir.html?m='+encodeURIComponent(m.id);
+      html+='<article class="carte'+(m.derniere?' recente':'')+'">'
+        +'<a class="apercu" href="'+voir+'" tabindex="-1" aria-hidden="true"><img loading="lazy" src="'+esc(m.apercu)+'" alt="" width="960" height="600"></a>'
+        +'<div class="corps">'+(m.derniere?'<span class="badge">Dernière version proposée</span>':'')
+        +'<h3>'+esc(m.titre)+'</h3><p>'+esc(m.description)+'</p>'
+        +'<span class="date">Mise à jour le '+date(m.maj)+'</span>'
+        +'<div class="actions"><a class="btn" href="'+voir+'">Consulter la maquette →</a><a class="lien" href="'+esc(m.fichier)+'">Plein écran</a></div>'
+        +'</div></article>';
+    });
+    html+='</div></section>';
+  });
+  document.getElementById('familles').innerHTML=html;
+  document.getElementById('sommaire').innerHTML=nav;
+})();
+</script>
+</body>
+</html>
