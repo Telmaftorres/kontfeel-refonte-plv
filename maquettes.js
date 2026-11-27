@@ -8,7 +8,7 @@
   - fichier  : page HTML de la maquette, à la racine du dépôt
   - apercu   : capture du haut de la page (1440 × 900 réduite à 960 px de large)
   - maj      : date de dernière modification, au format AAAA-MM-JJ
-  - derniere : true sur la dernière version proposée de la famille
+  - statut   : statut affiché sur la carte (ex. « En attente de validation »)
 */
 window.KONTFEEL_FAMILLES = [
   {
@@ -17,13 +17,13 @@ window.KONTFEEL_FAMILLES = [
     intro: 'Propositions de refonte de la page catégorie « Présentoir comptoir ».',
     maquettes: [
       {
-        id: 'p4',
-        titre: 'P4 — Découverte interactive',
-        description: 'Une page très courte au départ : on déplie les familles, les matériaux ou les secteurs, et la galerie se filtre selon la sélection.',
-        fichier: 'p4.html',
-        apercu: 'assets/apercus/p4.jpg',
+        id: 'p2',
+        titre: 'P2 — Filtres visibles à gauche',
+        description: 'Filtres visibles à gauche et catégories en vignettes.',
+        fichier: 'p2.html',
+        apercu: 'assets/apercus/p2.jpg',
         maj: '2026-11-26',
-        derniere: true
+        statut: 'En attente de validation'
       },
       {
         id: 'p3',
@@ -31,15 +31,17 @@ window.KONTFEEL_FAMILLES = [
         description: 'Une version plus courte, centrée sur les produits, les réalisations, les matériaux et la prise de contact.',
         fichier: 'p3.html',
         apercu: 'assets/apercus/p3.jpg',
-        maj: '2026-11-26'
+        maj: '2026-11-26',
+        statut: 'En attente de validation'
       },
       {
-        id: 'p2',
-        titre: 'P2 — Filtres visibles à gauche',
-        description: 'Filtres visibles à gauche et catégories en vignettes.',
-        fichier: 'p2.html',
-        apercu: 'assets/apercus/p2.jpg',
-        maj: '2026-11-26'
+        id: 'p4',
+        titre: 'P4 — Découverte interactive',
+        description: 'Une page très courte au départ : on déplie les familles, les matériaux ou les secteurs, et la galerie se filtre selon la sélection.',
+        fichier: 'p4.html',
+        apercu: 'assets/apercus/p4.jpg',
+        maj: '2026-11-26',
+        statut: 'En attente de validation'
       }
     ]
   },
@@ -54,7 +56,8 @@ window.KONTFEEL_FAMILLES = [
         description: 'Page de présentation avec la réalisation Céréal Bio — Love Tofu, des concepts par univers et une FAQ.',
         fichier: 'seeding-box.html',
         apercu: 'assets/apercus/seeding-box.jpg',
-        maj: '2026-11-27'
+        maj: '2026-11-27',
+        statut: 'En attente de validation'
       }
     ]
   }
